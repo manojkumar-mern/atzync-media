@@ -43,19 +43,17 @@ export default function ZoomWordSection() {
         0
       );
 
-      // 2. Hardware accelerated kinetic scale
+      // 2. High-precision vector scale
       tl.fromTo(
         zoomTextRef.current,
         {
           scale: 1,
           autoAlpha: 1,
-          force3D: true,
         },
         {
           scale: targetScale,
           ease: 'power1.in',
           duration: 1.0,
-          force3D: true,
         },
         0
       );
@@ -67,7 +65,6 @@ export default function ZoomWordSection() {
           autoAlpha: 0,
           duration: 0.15,
           ease: 'power1.out',
-          force3D: true,
         },
         0.85
       );
@@ -101,10 +98,9 @@ export default function ZoomWordSection() {
           justifyContent: 'center',
           boxSizing: 'border-box',
           isolation: 'isolate',
-          transform: 'translate3d(0,0,0)',
         }}
       >
-        {/* Ambient Background Glow (Hardware Accelerated) */}
+        {/* Ambient Background Glow */}
         <div
           style={{
             position: 'absolute',
@@ -116,7 +112,6 @@ export default function ZoomWordSection() {
             background: 'radial-gradient(circle, rgba(235, 94, 40, 0.14) 0%, rgba(235, 94, 40, 0.03) 45%, rgba(10, 11, 16, 0) 75%)',
             pointerEvents: 'none',
             zIndex: 1,
-            transform: 'translate3d(0,0,0)',
           }}
         />
 
@@ -155,20 +150,20 @@ export default function ZoomWordSection() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            willChange: 'transform, opacity',
             transformOrigin: '52% 50%',
-            transform: 'translate3d(0, 0, 0)',
             pointerEvents: 'none',
           }}
         >
           <svg
-            viewBox="0 0 1060 240"
+            viewBox="0 0 4240 960"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             style={{
               width: '100%',
               height: 'auto',
               overflow: 'visible',
+              shapeRendering: 'geometricPrecision',
+              textRendering: 'geometricPrecision',
             }}
           >
             {/* Bold Display Word: ATZYNC */}
@@ -179,7 +174,7 @@ export default function ZoomWordSection() {
               textAnchor="middle"
               fill="#ffffff"
               fontFamily="var(--font-display, Impact, sans-serif)"
-              fontSize="200"
+              fontSize="800"
               fontWeight="900"
               letterSpacing="0.04em"
               style={{

@@ -54,20 +54,18 @@ export default function ServicesSection({ onOpenProjectModal }) {
         },
       });
 
-      // 1. Kinetic Typography Zoom on "SERVICES" (hardware accelerated)
+      // 1. Kinetic Typography Zoom on "SERVICES"
       tl.fromTo(
         zoomTextRef.current,
         {
           scale: 1,
           opacity: 1,
-          force3D: true,
         },
         {
           scale: targetScale,
           opacity: 0,
           ease: 'power1.in',
           duration: 1.0,
-          force3D: true,
         },
         0
       );
@@ -77,13 +75,11 @@ export default function ServicesSection({ onOpenProjectModal }) {
         zoomStageRef.current,
         {
           opacity: 1,
-          force3D: true,
         },
         {
           opacity: 0,
           duration: 0.4,
           ease: 'power1.out',
-          force3D: true,
         },
         0.45
       );
@@ -114,7 +110,6 @@ export default function ServicesSection({ onOpenProjectModal }) {
             x: startX,
             y: startY,
             scale: 0.95,
-            force3D: true,
           },
           {
             opacity: 1,
@@ -123,7 +118,6 @@ export default function ServicesSection({ onOpenProjectModal }) {
             scale: 1,
             ease: 'power2.out',
             duration: 0.45,
-            force3D: true,
           },
           0.25 + (idx * (isMobile ? 0.05 : 0.07))
         );
@@ -167,11 +161,9 @@ export default function ServicesSection({ onOpenProjectModal }) {
           justifyContent: 'center',
           overflow: 'hidden',
           backgroundColor: '#0a0a0e',
-          transform: 'translate3d(0,0,0)',
-          willChange: 'opacity',
         }}
       >
-        {/* Ambient Radial Glow (Hardware Accelerated, No expensive CSS blur filters) */}
+        {/* Ambient Radial Glow */}
         <div
           style={{
             position: 'absolute',
@@ -183,7 +175,6 @@ export default function ServicesSection({ onOpenProjectModal }) {
             background: 'radial-gradient(circle, rgba(235, 94, 40, 0.16) 0%, rgba(235, 94, 40, 0.04) 50%, rgba(10, 10, 14, 0) 75%)',
             pointerEvents: 'none',
             zIndex: 1,
-            transform: 'translate3d(0, 0, 0)',
           }}
         />
 
@@ -198,22 +189,20 @@ export default function ServicesSection({ onOpenProjectModal }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            willChange: 'transform, opacity',
             transformOrigin: '50% 50%',
-            transform: 'translate3d(0, 0, 0)',
             pointerEvents: 'none',
-            backfaceVisibility: 'hidden',
-            WebkitFontSmoothing: 'antialiased',
           }}
         >
           <svg
-            viewBox="0 0 1080 240"
+            viewBox="0 0 4320 960"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             style={{
               width: '100%',
               height: 'auto',
               overflow: 'visible',
+              shapeRendering: 'geometricPrecision',
+              textRendering: 'geometricPrecision',
             }}
           >
             <text
@@ -223,7 +212,7 @@ export default function ServicesSection({ onOpenProjectModal }) {
               textAnchor="middle"
               fill="#ffffff"
               fontFamily="var(--font-display, Impact, sans-serif)"
-              fontSize="190"
+              fontSize="760"
               fontWeight="900"
               letterSpacing="0.04em"
               style={{
