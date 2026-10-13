@@ -1,13 +1,13 @@
 import { generateOwnerEmailHTML, generateClientEmailHTML } from './emailTemplates.js';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'ATZYNC MEDIA <onboarding@resend.dev>';
-const STUDIO_OWNER_EMAIL = process.env.STUDIO_OWNER_EMAIL || 'atzyncmedia@gmail.com';
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'ATZYNC MEDIA <bookings@atzyncmedia.com>';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.STUDIO_OWNER_EMAIL || 'atzyncmedia@gmail.com';
 
 /**
  * Helper to post email payload to Resend REST API
  */
-async function sendResendMail({ to, subject, html }) {
+async function sendResendMail({ to, subject, html, replyTo }) {
   if (!RESEND_API_KEY) {
     console.warn('[Resend Warning]: RESEND_API_KEY is missing.');
     return { success: false, error: 'Missing API key' };
@@ -25,6 +25,7 @@ async function sendResendMail({ to, subject, html }) {
         to: Array.isArray(to) ? to : [to],
         subject,
         html,
+        ...(replyTo ? { reply_to: replyTo } : {}),
       }),
     });
 
@@ -48,14 +49,15 @@ async function sendResendMail({ to, subject, html }) {
 export async function sendBookingEmails(inquiry) {
   const results = { ownerEmail: null, clientEmail: null };
 
-  // 1. Send Notification Email to Studio Owner (atzyncmedia@gmail.com)
+  // 1. Send Notification Email to Studio Owner (atzyncmedia@gmail.com) with Reply-To set to Client
   const ownerSubject = `NEW PROJECT BOOKING: ${inquiry.clientName} - ${inquiry.serviceType} [${inquiry.inquiryId}]`;
   const ownerHTML = generateOwnerEmailHTML(inquiry);
 
   const ownerRes = await sendResendMail({
-    to: [STUDIO_OWNER_EMAIL],
+    to: [ADMIN_EMAIL],
     subject: ownerSubject,
     html: ownerHTML,
+    replyTo: inquiry.email,
   });
   results.ownerEmail = ownerRes;
 

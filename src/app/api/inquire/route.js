@@ -64,11 +64,15 @@ export async function POST(request) {
       console.error(`[API Error] Email dispatch failed for inquiry ${inquiryId}:`, emailErr);
     }
 
+    const emailSent = Boolean(
+      emailStatus?.ownerEmail?.success && emailStatus?.clientEmail?.success
+    );
+
     return NextResponse.json(
       {
         success: true,
         dbSaved,
-        emailSent: true,
+        emailSent,
         emailStatus,
         inquiryId,
         inquiry: savedInquiry || inquiryPayload,
