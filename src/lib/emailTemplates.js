@@ -173,7 +173,7 @@ export function generateClientEmailHTML(inquiry) {
             <td style="padding: 36px 40px; background: linear-gradient(180deg, #121520 0%, #0b0d12 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: center;">
               <a href="https://atzyncmedia.com" target="_blank" style="text-decoration: none; display: inline-block;">
                 <img
-                  src="https://atzyncmedia.com/logo-white.webp"
+                  src="https://atzyncmedia.com/logo-white.png"
                   alt="ATZYNC MEDIA"
                   width="210"
                   style="display: block; margin: 0 auto; height: auto; max-width: 210px; width: 100%; border: 0; outline: none;"
