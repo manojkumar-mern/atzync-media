@@ -4,7 +4,7 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/api/'],
+        disallow: ['/api/'],
       },
     ],
     sitemap: 'https://atzyncmedia.com/sitemap.xml',

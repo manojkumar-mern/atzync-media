@@ -5,11 +5,23 @@ import SmoothScroll from '@/components/SmoothScroll';
 export const metadata = {
   metadataBase: new URL('https://atzyncmedia.com'),
   title: {
-    default: 'ATZYNC MEDIA | Creative Video Production & Digital Marketing',
+    default: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
     template: '%s | ATZYNC MEDIA',
   },
-  description: 'ATZYNC MEDIA — A Mint of Creativity. IDEAS → VISUALS → IMPACT. Premium video production and visual studio specializing in Commercial Ad Films, Product Photography, Corporate Videos, Real Estate Videos, Promotional Videos, and Meta Ads.',
-  keywords: ['Video Editing', 'Commercial Ad Film', 'Product Photography', 'Corporate Videos', 'Real Estate Videos', 'Promotional Videos', 'Meta Ads', 'Post Production', 'Visual Content', 'ATZYNC MEDIA'],
+  description:
+    'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
+  keywords: [
+    'ATZYNC MEDIA',
+    'Branding Films',
+    'Commercials',
+    'Social Media Videos',
+    'Digital Marketing',
+    'Video Production',
+    'Commercial Ad Film',
+    'Meta Ads',
+    'Post Production',
+    'Creative Studio',
+  ],
   authors: [{ name: 'ATZYNC MEDIA' }],
   creator: 'ATZYNC MEDIA',
   publisher: 'ATZYNC MEDIA',
@@ -17,6 +29,9 @@ export const metadata = {
     email: false,
     address: false,
     telephone: false,
+  },
+  alternates: {
+    canonical: '/',
   },
   robots: {
     index: true,
@@ -30,16 +45,17 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'ATZYNC MEDIA | Creative Video Production & Digital Marketing',
-    description: 'ATZYNC MEDIA — A Mint of Creativity. IDEAS → VISUALS → IMPACT. Premium video production and visual studio specializing in Commercial Ad Films, Product Photography, Corporate Videos, Real Estate Videos, Promotional Videos, and Meta Ads.',
+    title: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
+    description:
+      'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
     url: 'https://atzyncmedia.com',
     siteName: 'ATZYNC MEDIA',
     images: [
       {
-        url: '/logo-black.webp',
-        width: 1200,
-        height: 630,
-        alt: 'ATZYNC MEDIA Studio Logo',
+        url: '/images/hero-poster.webp',
+        width: 960,
+        height: 536,
+        alt: 'ATZYNC MEDIA — A Mint of Creativity',
       },
     ],
     locale: 'en_US',
@@ -47,9 +63,10 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ATZYNC MEDIA | Creative Video Production & Digital Marketing',
-    description: 'ATZYNC MEDIA — A Mint of Creativity. Premium Video Production & Visual Studio.',
-    images: ['/logo-black.webp'],
+    title: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
+    description:
+      'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
+    images: ['/images/hero-poster.webp'],
   },
   icons: {
     icon: [
@@ -68,9 +85,62 @@ export const viewport = {
   themeColor: '#0a0a0a',
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://atzyncmedia.com/#website',
+      url: 'https://atzyncmedia.com',
+      name: 'ATZYNC MEDIA',
+      alternateName: 'ATZYNCMEDIA',
+      description:
+        'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing.',
+      publisher: {
+        '@id': 'https://atzyncmedia.com/#organization',
+      },
+      inLanguage: 'en-US',
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://atzyncmedia.com/#organization',
+      name: 'ATZYNC MEDIA',
+      alternateName: 'ATZYNCMEDIA',
+      url: 'https://atzyncmedia.com',
+      logo: 'https://atzyncmedia.com/logo-white.png',
+      slogan: 'A Mint of Creativity',
+      description:
+        'Premium video production and digital marketing studio crafting high-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing.',
+      founder: {
+        '@type': 'Person',
+        name: 'Thomash Murugesan',
+        jobTitle: 'Managing Director',
+      },
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          telephone: '+91 9597127710',
+          contactType: 'customer service',
+          email: 'atzyncmedia@gmail.com',
+        },
+      ],
+      sameAs: [
+        'https://www.instagram.com/atzyncmedia?stkn=NXJyZDZiNXFjYjg5',
+        'https://linkedin.com/company/atzyncmedia',
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body>
         <SmoothScroll>
           {children}
