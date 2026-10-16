@@ -77,6 +77,9 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
       const valid = ['hero', 'about', 'services', 'work', 'cta'];
       if (valid.includes(hashId)) {
         setActiveSection(hashId);
+        if (hashId === 'hero') {
+          window.history.replaceState(null, '', '/');
+        }
       }
     }
 
@@ -91,11 +94,11 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
       (entries) => {
         if (isNavClickRef.current) return;
 
-        // If at the very top of the page, keep hero active
+        // If at the very top of the page, keep hero active and clean URL
         if (typeof window !== 'undefined' && window.scrollY < 120) {
           setActiveSection('hero');
-          if (window.location.hash !== '' && window.location.hash !== '#hero') {
-            window.history.replaceState(null, '', '/#hero');
+          if (window.location.hash !== '') {
+            window.history.replaceState(null, '', '/');
           }
           return;
         }
@@ -105,7 +108,16 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
             const id = entry.target.id;
             setActiveSection(id);
             if (typeof window !== 'undefined') {
-              window.history.replaceState(null, '', `/#${id}`);
+              if (id === 'hero') {
+                if (window.location.hash !== '') {
+                  window.history.replaceState(null, '', '/');
+                }
+              } else {
+                const targetHash = `#${id}`;
+                if (window.location.hash !== targetHash) {
+                  window.history.replaceState(null, '', `/#${id}`);
+                }
+              }
             }
           }
         });
@@ -119,7 +131,24 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
 
     sections.forEach((sec) => observer.observe(sec));
 
+    const handlePopState = () => {
+      if (typeof window === 'undefined') return;
+      const hashId = window.location.hash.replace('#', '');
+      const valid = ['about', 'services', 'work', 'cta'];
+      if (hashId && valid.includes(hashId)) {
+        setActiveSection(hashId);
+      } else {
+        setActiveSection('hero');
+        if (hashId === 'hero') {
+          window.history.replaceState(null, '', '/');
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
     return () => {
+      window.removeEventListener('popstate', handlePopState);
       sections.forEach((sec) => observer.unobserve(sec));
       observer.disconnect();
     };
@@ -137,6 +166,39 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
     }
 
     if (pathname === '/') {
+      // Home / Hero navigation
+      if (item.id === 'hero' || item.href === '/') {
+        if (e) e.preventDefault();
+        isNavClickRef.current = true;
+        setActiveSection('hero');
+        if (typeof window !== 'undefined' && window.location.hash !== '') {
+          window.history.pushState(null, '', '/');
+        }
+
+        const triggerScrollToTop = () => {
+          if (typeof window !== 'undefined' && window.lenis) {
+            window.lenis.start();
+            window.lenis.scrollTo(0, {
+              offset: 0,
+              duration: 1.2,
+              onComplete: () => {
+                isNavClickRef.current = false;
+              },
+            });
+          } else if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        };
+
+        triggerScrollToTop();
+        setTimeout(triggerScrollToTop, 50);
+
+        setTimeout(() => {
+          isNavClickRef.current = false;
+        }, 1400);
+        return;
+      }
+
       const hashIndex = item.href.indexOf('#');
       if (hashIndex !== -1) {
         const hash = item.href.substring(hashIndex);
@@ -177,7 +239,7 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
   };
 
   const navItems = [
-    { label: 'HOME', href: '/#hero', id: 'hero', number: '01' },
+    { label: 'HOME', href: '/', id: 'hero', number: '01' },
     { label: 'ABOUT', href: '/#about', id: 'about', number: '02' },
     { label: 'SERVICES', href: '/#services', id: 'services', number: '03' },
     { label: 'WORK', href: '/#work', id: 'work', number: '04' },
@@ -193,7 +255,16 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
       >
         <div className="site-container flex-row items-center justify-between">
           {/* Brand Logo */}
-          <a href="/" className="brand-logo flex-row items-center" style={{ gap: '0.75rem' }}>
+          <a
+            href="/"
+            className="brand-logo flex-row items-center"
+            style={{ gap: '0.75rem' }}
+            onClick={(e) => {
+              if (pathname === '/') {
+                handleNavClick(e, navItems[0]);
+              }
+            }}
+          >
             <span className="status-dot"></span>
             <img
               src="/logo-white.webp"
