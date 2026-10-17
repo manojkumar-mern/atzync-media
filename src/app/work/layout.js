@@ -9,7 +9,7 @@ export const metadata = {
     title: 'Selected Work & Portfolio | ATZYNC MEDIA',
     description:
       'Explore high-impact branding films, commercial ads, social media videos, and performance digital creative produced by ATZYNC MEDIA.',
-    url: 'https://atzyncmedia.com/work',
+    url: 'https://www.atzyncmedia.com/work',
     siteName: 'ATZYNC MEDIA',
     images: [
       {

@@ -1,5 +1,5 @@
 export default async function sitemap() {
-  const baseUrl = 'https://atzyncmedia.com';
+  const baseUrl = 'https://www.atzyncmedia.com';
 
   return [
     {

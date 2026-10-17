@@ -7,6 +7,6 @@ export default function robots() {
         disallow: ['/api/'],
       },
     ],
-    sitemap: 'https://atzyncmedia.com/sitemap.xml',
+    sitemap: 'https://www.atzyncmedia.com/sitemap.xml',
   };
 }

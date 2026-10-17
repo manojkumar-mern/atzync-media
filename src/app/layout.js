@@ -3,7 +3,7 @@ import '@/styles/admin.css';
 import SmoothScroll from '@/components/SmoothScroll';
 
 export const metadata = {
-  metadataBase: new URL('https://atzyncmedia.com'),
+  metadataBase: new URL('https://www.atzyncmedia.com'),
   title: {
     default: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
     template: '%s | ATZYNC MEDIA',
@@ -48,7 +48,7 @@ export const metadata = {
     title: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
     description:
       'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
-    url: 'https://atzyncmedia.com',
+    url: 'https://www.atzyncmedia.com/',
     siteName: 'ATZYNC MEDIA',
     images: [
       {
@@ -90,24 +90,24 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'WebSite',
-      '@id': 'https://atzyncmedia.com/#website',
-      url: 'https://atzyncmedia.com',
+      '@id': 'https://www.atzyncmedia.com/#website',
+      url: 'https://www.atzyncmedia.com/',
       name: 'ATZYNC MEDIA',
       alternateName: 'ATZYNCMEDIA',
       description:
         'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing.',
       publisher: {
-        '@id': 'https://atzyncmedia.com/#organization',
+        '@id': 'https://www.atzyncmedia.com/#organization',
       },
       inLanguage: 'en-US',
     },
     {
       '@type': 'Organization',
-      '@id': 'https://atzyncmedia.com/#organization',
+      '@id': 'https://www.atzyncmedia.com/#organization',
       name: 'ATZYNC MEDIA',
       alternateName: 'ATZYNCMEDIA',
-      url: 'https://atzyncmedia.com',
-      logo: 'https://atzyncmedia.com/logo-white.png',
+      url: 'https://www.atzyncmedia.com/',
+      logo: 'https://www.atzyncmedia.com/logo-white.png',
       slogan: 'A Mint of Creativity',
       description:
         'Premium video production and digital marketing studio crafting high-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing.',
