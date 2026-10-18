@@ -245,6 +245,38 @@
   color: #ffffff;
 }
 
+@media (max-width: 480px) {
+  .inquiry-pills-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.35rem !important;
+    width: 100% !important;
+  }
+
+  .inquiry-pills-grid .inquiry-pill {
+    width: 100% !important;
+    padding: 0.45rem 0.45rem !important;
+    font-size: 0.67rem !important;
+    letter-spacing: 0.01em !important;
+    gap: 0.3rem !important;
+    justify-content: flex-start !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+  }
+
+  .inquiry-pills-grid .inquiry-pill.active {
+    font-weight: 600 !important;
+  }
+
+  .inquiry-pills-grid .inquiry-pill .check-icon {
+    width: 13px !important;
+    height: 13px !important;
+    font-size: 0.52rem !important;
+    flex-shrink: 0 !important;
+    margin-right: 0.05rem !important;
+  }
+}
+
 /* Stylish Silver Pill Badges & Timecode Primitives */
 .badge-tag {
   display: inline-flex;

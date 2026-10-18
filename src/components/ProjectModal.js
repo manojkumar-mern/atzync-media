@@ -209,7 +209,7 @@ I just submitted a project inquiry on your website:
               <label className="meta-tag" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.1em' }}>
                 1. SELECT SERVICE REQUIRED *
               </label>
-              <div className="flex-row" style={{ flexWrap: 'wrap', gap: '0.45rem' }}>
+              <div className="flex-row inquiry-pills-grid" style={{ flexWrap: 'wrap', gap: '0.45rem' }}>
                 {servicesList.map((srv) => {
                   const isActive = formData.serviceType === srv;
                   return (
