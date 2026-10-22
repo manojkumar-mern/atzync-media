@@ -122,7 +122,7 @@ export default function AboutSection() {
               position: 'relative',
               width: '100%',
               maxWidth: '460px',
-              height: 'clamp(540px, 66vh, 660px)',
+              height: 'clamp(570px, 68vh, 690px)',
               margin: '0 auto',
               borderRadius: '26px',
               overflow: 'hidden',
@@ -135,15 +135,16 @@ export default function AboutSection() {
             {/* Background Portrait Image */}
             {isInView ? (
               <img
-                src="/images/about-portrait.webp"
+                src="/images/atzync-founder.webp"
                 alt="ATZYNC Media Founder & Creative Director"
                 loading="lazy"
                 decoding="async"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: 'calc(100% + 10px)',
                   objectFit: 'cover',
                   objectPosition: 'center top',
+                  transform: 'translateY(-10px)',
                   transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
               />

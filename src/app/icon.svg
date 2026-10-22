@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <rect width="128" height="128" rx="24" fill="#FFFFFF" />
-  <text x="64" y="60" font-family="'Syne', 'Space Grotesk', sans-serif" font-weight="800" font-size="34" fill="#000000" text-anchor="middle" letter-spacing="-1">atzync</text>
-  <text x="64" y="84" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#000000" text-anchor="middle" letter-spacing="0.5">media</text>
-  <circle cx="108" cy="36" r="6" fill="#000000" />
-</svg>

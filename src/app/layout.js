@@ -70,9 +70,11 @@ export const metadata = {
   },
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: 'any' },
       { url: '/favicon.webp', type: 'image/webp' },
+      { url: '/favicon-96x96.webp', type: 'image/webp', sizes: '96x96' },
     ],
-    shortcut: '/favicon.webp',
+    shortcut: '/favicon.ico',
     apple: '/favicon.webp',
   },
 };
