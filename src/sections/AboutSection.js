@@ -18,6 +18,7 @@ export default function AboutSection() {
   ];
 
   const [animatedStats, setAnimatedStats] = useState(['0+', '0+', '0.0%']);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
     if (!statsRef.current) return;
@@ -26,7 +27,8 @@ export default function AboutSection() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimatedRef.current) {
+          hasAnimatedRef.current = true;
           const startTime = performance.now();
           const duration = 1100; // ms ticker duration
 
@@ -49,9 +51,7 @@ export default function AboutSection() {
           };
 
           animFrameId = requestAnimationFrame(animate);
-        } else {
-          if (animFrameId) cancelAnimationFrame(animFrameId);
-          setAnimatedStats(['0+', '0+', '0.0%']);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.2 }
