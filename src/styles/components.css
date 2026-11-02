@@ -813,7 +813,7 @@
 
   .crazy-card-item {
     border-radius: 16px !important;
-    padding: 1.25rem !important;
+    padding: 0 !important;
   }
 
   /* Mobile Entrance Alignment & Typography Spacing */

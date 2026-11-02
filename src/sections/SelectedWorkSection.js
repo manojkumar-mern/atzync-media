@@ -14,30 +14,6 @@ export default function SelectedWorkSection({ onOpenModal }) {
   const viewportRef = useRef(null);
   const cardsRef = useRef([]);
 
-  const videoSources = [
-    '/videos/project-01.mp4',
-    '/videos/project-02.mp4',
-    '/videos/project-03.mp4',
-  ];
-
-  const projectWatermarks = [
-    'CINEMA',
-    'COMMERCIAL',
-    'VIRAL',
-    'META ADS',
-    'COLOR GRADE',
-    'AI MOTION',
-  ];
-
-  const projectSpecs = [
-    ['Cinematic Pacing', 'Custom Color Grade', 'Sound Architecture'],
-    ['Conversion Hooks', 'Dynamic Rhythm Cuts', 'High-Impact SFX'],
-    ['9:16 Retention Cuts', 'Viral Hook Design', 'Motion Typography'],
-    ['Creative Testing', 'Multi-Hook Variations', 'Direct-Response Edits'],
-    ['Precision Assembly', 'Master Export Suites', 'ARRI/LOG Color Mastery'],
-    ['Generative Synthesis', 'Neural VFX Cleanup', 'AI Upscaling & Motion'],
-  ];
-
   const handlePrevCard = () => {
     if (activeProjectIndex > 0) {
       soundManager.playWhoosh();
@@ -158,9 +134,6 @@ export default function SelectedWorkSection({ onOpenModal }) {
           {/* Cards Deck Container */}
           <div className="cards-deck-stage">
             {projects.map((project, index) => {
-              const isMediaLeft = index % 2 === 1; // Alternating desktop layout
-              const watermark = projectWatermarks[index % projectWatermarks.length];
-              const specs = projectSpecs[index % projectSpecs.length];
               const isCurrentOrNext = activeProjectIndex === index || activeProjectIndex + 1 === index || activeProjectIndex - 1 === index;
               const isInitiallyActive = index === 0;
 
@@ -168,14 +141,14 @@ export default function SelectedWorkSection({ onOpenModal }) {
                 <div
                   key={project.id}
                   ref={(el) => (cardsRef.current[index] = el)}
-                  className="crazy-card-item film-crop-marks"
+                  className="crazy-card-item"
                   style={{
                     position: 'absolute',
                     top: 0,
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundColor: '#0f1118',
+                    backgroundColor: '#0a0c14',
                     border: '1px solid rgba(255, 255, 255, 0.12)',
                     borderRadius: '24px',
                     boxShadow: '0 30px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05)',
@@ -188,156 +161,84 @@ export default function SelectedWorkSection({ onOpenModal }) {
                     overflow: 'hidden',
                     cursor: 'pointer',
                     boxSizing: 'border-box',
+                    padding: 0,
                   }}
                   onClick={() => {
                     soundManager.playWhoosh();
                     if (onOpenModal) {
                       onOpenModal({
                         title: project.title,
-                        videoSrc: videoSources[index % videoSources.length],
+                        videoSrc: project.video,
                         posterSrc: project.poster,
+                        aspect: project.aspect,
+                        orientation: project.orientation,
                       });
                     }
                   }}
                   data-cursor="WATCH PROJECT"
                 >
-                  {/* Background Watermark Text */}
-                  <div
-                    className="card-background-watermark"
-                    aria-hidden="true"
-                    style={{
-                      position: 'absolute',
-                      right: '-1%',
-                      bottom: '-8%',
-                      fontSize: 'clamp(5rem, 14vw, 13rem)',
-                      fontWeight: 900,
-                      color: 'rgba(255, 255, 255, 0.035)',
-                      lineHeight: 0.8,
-                      userSelect: 'none',
-                      pointerEvents: 'none',
-                      fontFamily: 'var(--font-display, Impact, sans-serif)',
-                      zIndex: 0,
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    {watermark}
-                  </div>
-
-                  {/* Card Inner Grid */}
-                  <div className={`stacked-card-grid ${isMediaLeft ? 'media-reversed' : ''}`}>
-                    {/* Visual Media Showcase */}
-                    <div className="stacked-card-media-wrap film-crop-marks">
-                      <LazyVideo
-                        poster={project.poster}
-                        src={isInView && isCurrentOrNext ? videoSources[index % videoSources.length] : undefined}
-                        autoPlay={activeProjectIndex === index}
+                  {/* Ambient Blurred Pillarbox/Letterbox Backdrop for Perfect Aspect-Ratio Frame */}
+                  {project.poster && (
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        overflow: 'hidden',
+                        borderRadius: '24px',
+                        pointerEvents: 'none',
+                        zIndex: 0,
+                      }}
+                    >
+                      <img
+                        src={project.poster}
+                        alt=""
+                        loading="lazy"
                         style={{
                           width: '100%',
                           height: '100%',
                           objectFit: 'cover',
-                          display: 'block',
+                          filter: 'blur(35px) brightness(0.22)',
+                          transform: 'scale(1.15)',
+                          opacity: project.orientation === 'portrait' ? 0.8 : 0.35,
                         }}
                       />
-                      <div className="stacked-card-img-overlay" />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'radial-gradient(ellipse at center, rgba(10, 12, 20, 0.2) 0%, rgba(10, 12, 20, 0.9) 85%)',
+                        }}
+                      />
                     </div>
+                  )}
 
-                    {/* Narrative Body */}
-                    <div className="stacked-card-body">
-                      <div className="flex-col" style={{ gap: '0.5rem' }}>
-                        <h3
-                          className="stacked-card-title"
-                          style={{
-                            fontSize: 'clamp(1.4rem, 2.8vw, 2.5rem)',
-                            fontWeight: 900,
-                            color: '#ffffff',
-                            lineHeight: 1.12,
-                            letterSpacing: '-0.02em',
-                            textTransform: 'uppercase',
-                            margin: 0,
-                          }}
-                        >
-                          {project.title}
-                        </h3>
-
-                        <p
-                          className="body-lead"
-                          style={{
-                            fontSize: 'clamp(0.85rem, 1.2vw, 1.05rem)',
-                            color: 'rgba(255, 255, 255, 0.9)',
-                            lineHeight: 1.35,
-                            fontWeight: 500,
-                            marginTop: '0.1rem',
-                          }}
-                        >
-                          {project.category} — {project.client}
-                        </p>
-
-                        <p
-                          className="body-regular stacked-card-desc"
-                          style={{
-                            fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
-                            color: 'rgba(255, 255, 255, 0.65)',
-                            lineHeight: 1.5,
-                            maxWidth: '540px',
-                          }}
-                        >
-                          {project.description}
-                        </p>
-                      </div>
-
-                      <div className="flex-col stacked-card-specs" style={{ gap: '0.85rem', marginTop: '0.75rem' }}>
-                        <div className="flex-row items-center" style={{ flexWrap: 'wrap', gap: '0.4rem' }}>
-                          {specs.map((spec, sIdx) => (
-                            <span
-                              key={sIdx}
-                              className="stacked-card-spec-pill"
-                              style={{
-                                fontSize: '0.7rem',
-                                fontWeight: 600,
-                                padding: '0.3rem 0.65rem',
-                                borderRadius: '100px',
-                                backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                                border: '1px solid rgba(255, 255, 255, 0.12)',
-                                color: 'rgba(255, 255, 255, 0.85)',
-                              }}
-                            >
-                              ✓ {spec}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div className="flex-row items-center" style={{ gap: '1rem' }}>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              soundManager.playWhoosh();
-                              if (onOpenModal) {
-                                onOpenModal({
-                                  title: project.title,
-                                  videoSrc: videoSources[index % videoSources.length],
-                                  posterSrc: project.poster,
-                                });
-                              }
-                            }}
-                            className="btn-primary flex-row items-center"
-                            style={{
-                              padding: '0.55rem 1.25rem',
-                              fontSize: '0.78rem',
-                              fontWeight: 700,
-                              borderRadius: '100px',
-                              cursor: 'pointer',
-                              gap: '0.5rem',
-                            }}
-                          >
-                            <span>WATCH FULL CUT</span>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                              <polygon points="5 3 19 12 5 21 5 3" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  {/* Video Stage Frame */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden',
+                      borderRadius: '24px',
+                      zIndex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <LazyVideo
+                      poster={project.poster}
+                      src={isInView && isCurrentOrNext ? project.video : undefined}
+                      autoPlay={activeProjectIndex === index}
+                      isPortrait={project.orientation === 'portrait'}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        display: 'block',
+                      }}
+                    />
                   </div>
                 </div>
               );

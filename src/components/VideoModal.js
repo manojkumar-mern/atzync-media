@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Hls from 'hls.js';
 import { soundManager } from '@/lib/audioManager';
 
 export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title = 'SHOWREEL 2026' }) {
@@ -11,9 +12,83 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
   const [isFullscreen, setIsFullscreen] = useState(false);
   const modalContentRef = useRef(null);
   const videoRef = useRef(null);
+  const hlsRef = useRef(null);
 
   const activeVideo = videoSrc || '/videos/showreel.mp4';
   const activePoster = posterSrc || '/images/hero-poster.webp';
+
+  useEffect(() => {
+    if (!isOpen) {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+      return;
+    }
+
+    const video = videoRef.current;
+    if (!video || !activeVideo) return;
+
+    const isHls = typeof activeVideo === 'string' && activeVideo.includes('.m3u8');
+    const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    // Safari Native HLS
+    if (isHls && isSafari && video.canPlayType('application/vnd.apple.mpegurl')) {
+      if (video.src !== activeVideo) {
+        video.src = activeVideo;
+      }
+    }
+    // Chromium / Firefox MSE via Hls.js
+    else if (isHls && Hls.isSupported()) {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: false,
+        backBufferLength: 30,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        capLevelToPlayerSize: false, // Ensures full 4K UHD presentation
+      });
+
+      hls.loadSource(activeVideo);
+      hls.attachMedia(video);
+
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              hls.recoverMediaError();
+              break;
+            default:
+              hls.destroy();
+              break;
+          }
+        }
+      });
+
+      hlsRef.current = hls;
+    }
+    // Fallback regular video file
+    else if (video.src !== activeVideo) {
+      video.src = activeVideo;
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [isOpen, activeVideo]);
+
+
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -197,13 +272,42 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
             aspectRatio: isFullscreen ? 'auto' : '16/9',
             maxHeight: isFullscreen ? 'none' : '65vh',
             flex: isFullscreen ? 1 : 'none',
-            backgroundColor: '#000',
+            backgroundColor: '#05060a',
             overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
+          {/* Ambient Blurred Pillarbox/Letterbox Backdrop */}
+          {activePoster && (
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                overflow: 'hidden',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            >
+              <img
+                src={activePoster}
+                alt=""
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  filter: 'blur(45px) brightness(0.25)',
+                  transform: 'scale(1.2)',
+                  opacity: 0.75,
+                }}
+              />
+            </div>
+          )}
+
           <video
             ref={videoRef}
-            src={activeVideo}
             poster={activePoster}
             autoPlay
             playsInline
@@ -212,9 +316,11 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
             onEnded={() => setIsPlaying(false)}
             onClick={togglePlay}
             style={{
+              position: 'relative',
+              zIndex: 1,
               width: '100%',
               height: '100%',
-              objectFit: isFullscreen ? 'contain' : 'cover',
+              objectFit: 'contain',
               cursor: 'pointer',
             }}
           />
@@ -226,6 +332,7 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
               inset: 0,
               background: 'radial-gradient(circle at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%)',
               pointerEvents: 'none',
+              zIndex: 2,
             }}
           />
 
@@ -239,6 +346,7 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                zIndex: 3,
               }}
               onClick={togglePlay}
             >
