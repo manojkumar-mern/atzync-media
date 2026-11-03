@@ -137,13 +137,35 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     };
   }, [isOpen, activeVideo, resetControlsTimeout]);
 
-  // Handle body lock, sound boom, and keyboard shortcuts
+  // Track popstate vs programmatic close for mobile back button navigation
+  const isPoppingHistoryRef = useRef(false);
+
+  // Handle body lock, Lenis scroll sync, sound boom, mobile back button & keyboard shortcuts
   useEffect(() => {
     if (!isOpen) return;
 
+    // 1. Lock scroll and Lenis smoothly
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    if (typeof window !== 'undefined' && window.lenis) {
+      window.lenis.stop();
+    }
     soundManager.playSubBoom();
 
+    // 2. Push history state so mobile back button (or gesture) closes modal instead of leaving site
+    const stateId = 'video-modal-' + Date.now();
+    window.history.pushState({ videoModal: stateId }, '', window.location.href);
+    isPoppingHistoryRef.current = false;
+
+    // 3. Listen to browser popstate (mobile hardware back, gesture swipe back, or browser back)
+    const handlePopState = () => {
+      isPoppingHistoryRef.current = true;
+      onClose();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    // 4. Keyboard shortcuts
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
@@ -158,8 +180,22 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      if (typeof window !== 'undefined' && window.lenis) {
+        window.lenis.start();
+      }
+
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('popstate', handlePopState);
+
+      // If closed programmatically (close '✕' button or Escape), pop the history state
+      // so the browser history doesn't retain an extra dead step.
+      if (!isPoppingHistoryRef.current) {
+        if (window.history.state && window.history.state.videoModal === stateId) {
+          window.history.back();
+        }
+      }
     };
   }, [isOpen, onClose]);
 
@@ -212,6 +248,8 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     <div
       ref={containerRef}
       className="direct-fullscreen-video-modal"
+      data-lenis-prevent="true"
+      data-lenis-prevent-touch="true"
       style={{
         position: 'fixed',
         inset: 0,
