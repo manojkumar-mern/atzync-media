@@ -169,7 +169,6 @@ export default function SelectedWorkSection({ onOpenModal }) {
                       onOpenModal({
                         title: project.title,
                         videoSrc: project.video,
-                        posterSrc: project.poster,
                         aspect: project.aspect,
                         orientation: project.orientation,
                       });
@@ -177,43 +176,19 @@ export default function SelectedWorkSection({ onOpenModal }) {
                   }}
                   data-cursor="WATCH PROJECT"
                 >
-                  {/* Ambient Blurred Pillarbox/Letterbox Backdrop for Perfect Aspect-Ratio Frame */}
-                  {project.poster && (
-                    <div
-                      aria-hidden="true"
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        overflow: 'hidden',
-                        borderRadius: '24px',
-                        pointerEvents: 'none',
-                        zIndex: 0,
-                      }}
-                    >
-                      <img
-                        src={project.poster}
-                        alt=""
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          filter: 'blur(35px) brightness(0.22)',
-                          transform: 'scale(1.15)',
-                          opacity: project.orientation === 'portrait' ? 0.8 : 0.35,
-                        }}
-                      />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background: 'radial-gradient(ellipse at center, rgba(10, 12, 20, 0.2) 0%, rgba(10, 12, 20, 0.9) 85%)',
-                        }}
-                      />
-                    </div>
-                  )}
+                  {/* Clean Dark Background - No Unrelated Image Backdrops */}
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'radial-gradient(ellipse at center, rgba(18, 20, 28, 0.8) 0%, rgba(10, 12, 20, 1) 100%)',
+                      pointerEvents: 'none',
+                      zIndex: 0,
+                    }}
+                  />
 
-                  {/* Video Stage Frame */}
+                  {/* Video Stage Frame - Direct Video Only */}
                   <div
                     style={{
                       position: 'relative',
@@ -228,7 +203,6 @@ export default function SelectedWorkSection({ onOpenModal }) {
                     }}
                   >
                     <LazyVideo
-                      poster={project.poster}
                       src={isInView && isCurrentOrNext ? project.video : undefined}
                       autoPlay={activeProjectIndex === index}
                       isPortrait={project.orientation === 'portrait'}

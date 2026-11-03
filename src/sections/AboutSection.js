@@ -117,34 +117,24 @@ export default function AboutSection() {
             ref={cardRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="scroll-reveal stagger-2"
+            className="about-founder-card scroll-reveal stagger-2"
             style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '460px',
-              height: 'clamp(570px, 68vh, 690px)',
-              margin: '0 auto',
-              borderRadius: '26px',
-              overflow: 'hidden',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.22)',
-              background: '#07080c',
-              cursor: 'pointer',
               ...tiltStyle,
             }}
           >
             {/* Background Portrait Image */}
             {isInView ? (
               <img
-                src="/images/atzync-founder.webp"
-                alt="ATZYNC Media Founder & Creative Director"
+                src="/images/thomash murugesan.webp"
+                alt="Thomash Murugesan - ATZYNC Media Managing Director"
                 loading="lazy"
                 decoding="async"
                 style={{
                   width: '100%',
-                  height: 'calc(100% + 10px)',
+                  height: '100%',
                   objectFit: 'cover',
                   objectPosition: 'center top',
-                  transform: 'translateY(-10px)',
+                  display: 'block',
                   transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
               />

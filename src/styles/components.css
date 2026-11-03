@@ -1834,61 +1834,89 @@
   }
 }
 
-/* Fullscreen Mode Styles for Video Modal */
-.video-modal-content.video-modal-fullscreen,
-:fullscreen .video-modal-content,
-:-webkit-full-screen .video-modal-content {
+/* About Section Founder Portrait Card */
+.about-founder-card {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1024 / 1265;
+  margin: 0 auto;
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.22);
+  background: #07080c;
+  cursor: pointer;
+  will-change: transform;
+}
+
+/* Bigger Monitor Screens (1600px+ and 4K displays) */
+@media (min-width: 1600px) {
+  .about-founder-card {
+    max-width: clamp(480px, 28vw, 540px);
+  }
+}
+
+/* Direct Fullscreen Video Modal & Clean Cinema Player */
+.direct-fullscreen-video-modal {
   position: fixed !important;
   inset: 0 !important;
   top: 0 !important;
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  max-width: 100vw !important;
-  max-height: 100vh !important;
-  border-radius: 0 !important;
-  border: none !important;
-  margin: 0 !important;
+  height: 100dvh !important;
   z-index: 99999 !important;
+  background-color: #000000 !important;
   display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.direct-fullscreen-video-modal video {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100vw !important;
+  max-height: 100dvh !important;
+  object-fit: contain !important;
   background-color: #000000 !important;
 }
 
-.video-modal-content.video-modal-fullscreen .video-stage-container,
-:fullscreen .video-stage-container,
-:-webkit-full-screen .video-stage-container {
-  flex: 1 !important;
-  height: 100% !important;
-  max-height: none !important;
-  aspect-ratio: auto !important;
+/* Fullscreen Action Buttons (Close & Mute) */
+.fullscreen-action-btn {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.video-modal-content.video-modal-fullscreen video,
-:fullscreen video,
-:-webkit-full-screen video {
-  width: 100% !important;
-  height: 100% !important;
+.fullscreen-action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.08) !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Portrait orientation fit on mobile straight screen */
+.fullscreen-action-btn:active {
+  transform: scale(0.94) !important;
+}
+
+/* All screens & orientations: never crop video */
+.video-modal-content video,
+.video-modal-fullscreen video,
+.direct-fullscreen-video-modal video {
+  object-fit: contain !important;
+}
+
 @media (max-width: 768px) and (orientation: portrait) {
-  .video-modal-content.video-modal-fullscreen video {
-    object-fit: cover !important;
-  }
-}
-
-/* Landscape orientation fit on mobile horizontal & desktop */
-@media (orientation: landscape), (min-width: 769px) {
-  .video-modal-content.video-modal-fullscreen video {
+  .video-modal-content.video-modal-fullscreen video,
+  .direct-fullscreen-video-modal video {
     object-fit: contain !important;
   }
 }
 
-.video-control-fullscreen-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
+@media (orientation: landscape), (min-width: 769px) {
+  .video-modal-content.video-modal-fullscreen video,
+  .direct-fullscreen-video-modal video {
+    object-fit: contain !important;
+  }
 }
 
 /* CTA Background Image Layer (Rock-Solid Fixed Viewport Layer - Zero Shaking on Mobile & Desktop) */

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Hls from 'hls.js';
 import { soundManager } from '@/lib/audioManager';
 
@@ -9,22 +9,43 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const modalContentRef = useRef(null);
+  const [showControls, setShowControls] = useState(false);
+
+  const containerRef = useRef(null);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
+  const controlsTimeoutRef = useRef(null);
 
   const activeVideo = videoSrc || '/videos/showreel.mp4';
-  const activePoster = posterSrc || '/images/hero-poster.webp';
 
+  const resetControlsTimeout = useCallback(() => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    controlsTimeoutRef.current = setTimeout(() => {
+      setShowControls(false);
+    }, 2500);
+  }, []);
+
+  // Initialize HLS / Native playback when modal opens
   useEffect(() => {
     if (!isOpen) {
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
       }
+      if (controlsTimeoutRef.current) {
+        clearTimeout(controlsTimeoutRef.current);
+      }
       return;
     }
+
+    // Modal opened: reset state to playing with sound
+    setIsPlaying(true);
+    setIsMuted(false);
+    setShowControls(true);
+    resetControlsTimeout();
 
     const video = videoRef.current;
     if (!video || !activeVideo) return;
@@ -32,11 +53,29 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     const isHls = typeof activeVideo === 'string' && activeVideo.includes('.m3u8');
     const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
+    const startPlayback = () => {
+      video.muted = false;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(() => {
+            // If browser blocks unmuted playback, fall back to muted
+            video.muted = true;
+            setIsMuted(true);
+            video.play().catch(() => {});
+          });
+      }
+    };
+
     // Safari Native HLS
     if (isHls && isSafari && video.canPlayType('application/vnd.apple.mpegurl')) {
       if (video.src !== activeVideo) {
         video.src = activeVideo;
       }
+      video.addEventListener('loadedmetadata', startPlayback, { once: true });
     }
     // Chromium / Firefox MSE via Hls.js
     else if (isHls && Hls.isSupported()) {
@@ -51,11 +90,15 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
         backBufferLength: 30,
         maxBufferLength: 30,
         maxMaxBufferLength: 60,
-        capLevelToPlayerSize: false, // Ensures full 4K UHD presentation
+        capLevelToPlayerSize: false, // Ensures full 4K UHD presentation without downscaling
       });
 
       hls.loadSource(activeVideo);
       hls.attachMedia(video);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        startPlayback();
+      });
 
       hls.on(Hls.Events.ERROR, (event, data) => {
         if (data.fatal) {
@@ -76,8 +119,11 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
       hlsRef.current = hls;
     }
     // Fallback regular video file
-    else if (video.src !== activeVideo) {
-      video.src = activeVideo;
+    else {
+      if (video.src !== activeVideo) {
+        video.src = activeVideo;
+      }
+      startPlayback();
     }
 
     return () => {
@@ -85,96 +131,63 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
         hlsRef.current.destroy();
         hlsRef.current = null;
       }
+      if (controlsTimeoutRef.current) {
+        clearTimeout(controlsTimeoutRef.current);
+      }
     };
-  }, [isOpen, activeVideo]);
+  }, [isOpen, activeVideo, resetControlsTimeout]);
 
-
-
+  // Handle body lock, sound boom, and keyboard shortcuts
   useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.style.overflow = 'hidden';
+    soundManager.playSubBoom();
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key === 'm' || e.key === 'M') {
+        toggleMute();
+      }
     };
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-      soundManager.playSubBoom();
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.body.style.overflow = 'auto';
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      const isFS = !!(
-        document.fullscreenElement ||
-        document.webkitFullscreenElement ||
-        document.mozFullScreenElement ||
-        document.msFullscreenElement
-      );
-      setIsFullscreen(isFS);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
-    };
-  }, []);
-
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
+        setIsPlaying(false);
+        setShowControls(true);
+        if (controlsTimeoutRef.current) {
+          clearTimeout(controlsTimeoutRef.current);
+        }
       } else {
-        videoRef.current.play();
+        videoRef.current.play().catch(() => {});
+        setIsPlaying(true);
+        resetControlsTimeout();
       }
-      setIsPlaying(!isPlaying);
       soundManager.playClick();
     }
   };
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      const nextMuted = !isMuted;
+      videoRef.current.muted = nextMuted;
+      setIsMuted(nextMuted);
       soundManager.playClick();
-    }
-  };
-
-  const toggleFullscreen = () => {
-    soundManager.playClick();
-    const container = modalContentRef.current;
-
-    if (!document.fullscreenElement && !document.webkitFullscreenElement && !isFullscreen) {
-      if (container?.requestFullscreen) {
-        container.requestFullscreen().catch(() => {
-          setIsFullscreen(true);
-        });
-      } else if (container?.webkitRequestFullscreen) {
-        container.webkitRequestFullscreen();
-      } else if (videoRef.current?.webkitEnterFullscreen) {
-        videoRef.current.webkitEnterFullscreen();
-      } else {
-        setIsFullscreen(true);
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => setIsFullscreen(false));
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else {
-        setIsFullscreen(false);
-      }
+      resetControlsTimeout();
     }
   };
 
@@ -185,294 +198,229 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     }
   };
 
-  const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = Math.floor(timeInSeconds % 60);
-    const frames = Math.floor((timeInSeconds % 1) * 24);
-    return `00:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${frames.toString().padStart(2, '0')}`;
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setShowControls(true);
   };
 
   if (!isOpen) return null;
 
+  // Controls are visible when paused, or temporarily on mouse move / tap
+  const areControlsVisible = !isPlaying || showControls;
+
   return (
     <div
-      className="video-modal-backdrop"
+      ref={containerRef}
+      className="direct-fullscreen-video-modal"
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 9999,
-        backgroundColor: 'rgba(0, 0, 0, 0.94)',
-        backdropFilter: 'blur(16px)',
+        width: '100vw',
+        height: '100vh',
+        height: '100dvh',
+        zIndex: 99999,
+        backgroundColor: '#000000',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isFullscreen ? '0' : 'var(--space-md)',
-        animation: 'fadeIn 0.3s ease-out forwards',
+        overflow: 'hidden',
+        animation: 'fadeIn 0.25s ease-out forwards',
+        cursor: areControlsVisible ? 'default' : 'none',
       }}
-      onClick={onClose}
+      onMouseMove={resetControlsTimeout}
+      onTouchStart={resetControlsTimeout}
+      onClick={togglePlay}
     >
-      <div
-        ref={modalContentRef}
-        className={`video-modal-content film-crop-marks silver-sheen ${isFullscreen ? 'video-modal-fullscreen' : ''}`}
+      {/* Pure Cinema Video Stage: 100% full view, zero crop across all aspect ratios */}
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted={isMuted}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
         style={{
-          position: 'relative',
           width: '100%',
-          maxWidth: isFullscreen ? '100vw' : '1100px',
-          backgroundColor: '#0a0a0c',
-          border: isFullscreen ? 'none' : '1px solid var(--border-strong)',
-          borderRadius: isFullscreen ? '0' : '16px',
-          boxShadow: '0 25px 80px rgba(0,0,0,0.95)',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          height: isFullscreen ? '100vh' : 'auto',
+          height: '100%',
+          maxWidth: '100vw',
+          maxHeight: '100dvh',
+          objectFit: 'contain',
+          display: 'block',
+          backgroundColor: '#000000',
         }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header Bar */}
-        <div
-          className="flex-row items-center justify-between"
-          style={{
-            padding: '0.75rem 1.25rem',
-            borderBottom: '1px solid var(--border-subtle)',
-            backgroundColor: 'rgba(15, 15, 18, 0.9)',
-          }}
-        >
-          <div className="flex-row items-center" style={{ gap: '0.75rem' }}>
-            <span className="status-dot"></span>
-            <span className="badge-tag video-modal-header-badge">CINEMATIC REAL PLAYER</span>
-            <span className="meta-tag video-modal-title" style={{ color: 'var(--text-primary)' }}>{title}</span>
-          </div>
+      />
 
-          <button
-            onClick={() => { soundManager.playClick(); onClose(); }}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              fontSize: '1.25rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0.25rem 0.5rem',
-            }}
-            aria-label="Close modal"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Video Canvas Stage */}
+      {/* Center Play Button Overlay (ONLY shown when paused) */}
+      {!isPlaying && (
         <div
-          className="video-stage-container"
           style={{
-            position: 'relative',
-            width: '100%',
-            aspectRatio: isFullscreen ? 'auto' : '16/9',
-            maxHeight: isFullscreen ? 'none' : '65vh',
-            flex: isFullscreen ? 1 : 'none',
-            backgroundColor: '#05060a',
-            overflow: 'hidden',
+            position: 'absolute',
+            inset: 0,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 10,
+            pointerEvents: 'none',
           }}
         >
-          {/* Ambient Blurred Pillarbox/Letterbox Backdrop */}
-          {activePoster && (
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                overflow: 'hidden',
-                pointerEvents: 'none',
-                zIndex: 0,
-              }}
-            >
-              <img
-                src={activePoster}
-                alt=""
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: 'blur(45px) brightness(0.25)',
-                  transform: 'scale(1.2)',
-                  opacity: 0.75,
-                }}
-              />
-            </div>
-          )}
-
-          <video
-            ref={videoRef}
-            poster={activePoster}
-            autoPlay
-            playsInline
-            muted={isMuted}
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={() => setIsPlaying(false)}
-            onClick={togglePlay}
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              cursor: 'pointer',
-            }}
-          />
-
-          {/* Vignette Overlay */}
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%)',
-              pointerEvents: 'none',
-              zIndex: 2,
-            }}
-          />
-
-          {/* Center Play/Pause Overlay */}
-          {!isPlaying && (
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                zIndex: 3,
-              }}
-              onClick={togglePlay}
-            >
-              <div
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--text-primary)',
-                  color: 'var(--bg-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingLeft: '6px',
-                  boxShadow: '0 0 40px rgba(255,255,255,0.4)',
-                }}
-              >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                  <polygon points="5 3 19 12 5 21 5 3" />
-                </svg>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Control Bar */}
-        <div
-          className="video-modal-control-bar flex-col"
-          style={{
-            padding: '1rem 1.25rem',
-            backgroundColor: 'rgba(12, 12, 15, 0.95)',
-            borderTop: '1px solid var(--border-subtle)',
-            gap: '0.75rem',
-          }}
-        >
-          {/* Progress Timeline */}
-          <div
-            style={{
-              width: '100%',
-              height: '6px',
-              backgroundColor: 'rgba(255,255,255,0.15)',
-              position: 'relative',
-              cursor: 'pointer',
-              borderRadius: '3px',
-              overflow: 'hidden',
-            }}
-            onClick={(e) => {
-              if (videoRef.current && duration > 0) {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const pct = clickX / rect.width;
-                videoRef.current.currentTime = pct * duration;
-              }
+              width: '84px',
+              height: '84px',
+              borderRadius: '50%',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              color: '#000000',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingLeft: '5px',
+              boxShadow: '0 0 50px rgba(255, 255, 255, 0.45)',
+              transition: 'transform 0.2s ease',
             }}
           >
-            <div
-              style={{
-                width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`,
-                height: '100%',
-                backgroundColor: 'var(--text-primary)',
-                boxShadow: '0 0 10px rgba(255,255,255,0.8)',
-              }}
-            />
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 3 20 12 6 21 6 3" />
+            </svg>
           </div>
+        </div>
+      )}
 
-          <div className="video-modal-controls flex-row items-center justify-between">
-            <div className="flex-row items-center video-modal-buttons-group" style={{ gap: '0.65rem' }}>
-              <button
-                onClick={togglePlay}
-                className="btn-primary"
-                style={{ padding: '0.4rem 0.85rem', fontSize: '0.75rem', borderRadius: '20px', whiteSpace: 'nowrap' }}
-              >
-                {isPlaying ? 'PAUSE' : 'PLAY'}
-              </button>
-              <button
-                onClick={toggleMute}
-                className="btn-secondary"
-                style={{ padding: '0.4rem 0.85rem', fontSize: '0.75rem', borderRadius: '20px', whiteSpace: 'nowrap' }}
-              >
-                {isMuted ? 'UNMUTE' : 'MUTE 🔊'}
-              </button>
-            </div>
+      {/* Floating Top-Right Actions: Discreet Mute & Close Buttons (Auto-hidden while playing) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 'clamp(1rem, 3.5vh, 2.5rem)',
+          right: 'clamp(1rem, 3.5vw, 2.5rem)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          zIndex: 20,
+          opacity: areControlsVisible ? 1 : 0,
+          pointerEvents: areControlsVisible ? 'auto' : 'none',
+          transition: 'opacity 0.35s ease',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Sound Toggle Button */}
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          title={isMuted ? 'Unmute (M)' : 'Mute (M)'}
+          style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(20, 20, 26, 0.8)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.22)',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6)',
+            transition: 'all 0.2s ease',
+          }}
+          className="fullscreen-action-btn"
+        >
+          {isMuted ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+          )}
+        </button>
 
-            <div className="video-modal-timecode-container">
-              <span className="timecode-tag video-modal-timecode" style={{ whiteSpace: 'nowrap' }}>
-                {formatTime(currentTime)} // {formatTime(duration)}
-              </span>
-            </div>
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={() => {
+            soundManager.playClick();
+            onClose();
+          }}
+          aria-label="Close fullscreen video"
+          title="Close (Esc)"
+          style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(20, 20, 26, 0.8)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.22)',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6)',
+            transition: 'all 0.2s ease',
+          }}
+          className="fullscreen-action-btn"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
 
-            <div className="flex-row items-center video-modal-right-controls" style={{ gap: '0.75rem' }}>
-              <span className="meta-tag video-modal-meta" style={{ whiteSpace: 'nowrap' }}>4K DCI // 24FPS</span>
-              <span className="badge-tag video-modal-editorial-tag" style={{ borderRadius: '20px', whiteSpace: 'nowrap' }}>REAL EDITORIAL CUT</span>
-              <button
-                onClick={toggleFullscreen}
-                className="video-control-fullscreen-btn"
-                title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-                aria-label="Toggle Fullscreen"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: '#ffffff',
-                  borderRadius: '20px',
-                  padding: '0.38rem 0.65rem',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                {isFullscreen ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
-                  </svg>
-                ) : (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
+      {/* Floating Bottom Minimal Progress Bar (Auto-hidden while playing) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: 'clamp(1rem, 2.5vh, 2rem) clamp(1rem, 3.5vw, 2.5rem)',
+          paddingBottom: 'max(clamp(1rem, 2.5vh, 2rem), env(safe-area-inset-bottom))',
+          background: 'linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, transparent 100%)',
+          zIndex: 20,
+          opacity: areControlsVisible ? 1 : 0,
+          pointerEvents: areControlsVisible ? 'auto' : 'none',
+          transition: 'opacity 0.35s ease',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          style={{
+            width: '100%',
+            height: '4px',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: '99px',
+            position: 'relative',
+            cursor: 'pointer',
+            overflow: 'hidden',
+          }}
+          onClick={(e) => {
+            if (videoRef.current && duration > 0) {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const clickX = e.clientX - rect.left;
+              const pct = Math.max(0, Math.min(1, clickX / rect.width));
+              videoRef.current.currentTime = pct * duration;
+              resetControlsTimeout();
+            }
+          }}
+        >
+          <div
+            style={{
+              width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`,
+              height: '100%',
+              backgroundColor: 'var(--accent-orange, #ff5500)',
+              boxShadow: '0 0 12px rgba(255, 85, 0, 0.8)',
+              borderRadius: '99px',
+            }}
+          />
         </div>
       </div>
     </div>
   );
 }
-

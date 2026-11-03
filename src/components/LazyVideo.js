@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import Hls from 'hls.js';
 
 export default function LazyVideo({
@@ -12,41 +12,17 @@ export default function LazyVideo({
   muted = true,
   loop = true,
   playsInline = true,
-  preload = 'none',
+  preload = 'auto',
   isPortrait = false,
   ...props
 }) {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
-  const [isInView, setIsInView] = useState(false);
-
-  // IntersectionObserver to observe visibility
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-        } else {
-          setIsInView(false);
-          if (videoRef.current) {
-            videoRef.current.pause();
-          }
-        }
-      },
-      { rootMargin: '300px' }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   // HLS.js / Native HLS lifecycle
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !src || !isInView) {
+    if (!video || !src) {
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
@@ -112,24 +88,24 @@ export default function LazyVideo({
         hlsRef.current = null;
       }
     };
-  }, [src, isInView]);
+  }, [src]);
 
-  // Handle Play / Pause based on autoPlay & visibility
+  // Handle Play / Pause based on autoPlay & src presence
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (autoPlay && isInView && src) {
+    if (autoPlay && src) {
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay was prevented or interrupted, silence error
+          // Autoplay was prevented or interrupted, silence safely
         });
       }
     } else {
       video.pause();
     }
-  }, [autoPlay, isInView, src]);
+  }, [autoPlay, src]);
 
   return (
     <video
