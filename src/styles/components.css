@@ -1944,7 +1944,76 @@
   }
 }
 
+/* ==========================================================================
+   Cinematic Video Loading Indicator (Cards & Lightbox Modal)
+   ========================================================================== */
+.video-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+  background: radial-gradient(circle at center, rgba(10, 12, 20, 0.45) 0%, rgba(10, 12, 20, 0.2) 70%, transparent 100%);
+  animation: videoLoadingFadeIn 0.25s ease-out forwards;
+}
 
+.video-loading-spinner {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-right-color: rgba(255, 255, 255, 0.9);
+  animation: videoSpinnerRotate 0.85s linear infinite;
+  will-change: transform;
+}
 
+.video-modal-loading-spinner {
+  width: 38px;
+  height: 38px;
+  border-width: 2.5px;
+}
 
+.video-loading-text {
+  font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes videoSpinnerRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes videoLoadingFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-loading-spinner {
+    animation-duration: 2.5s;
+    opacity: 0.75;
+  }
+  .video-loading-overlay {
+    animation: none;
+  }
+}
 

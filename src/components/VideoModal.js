@@ -10,6 +10,8 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   const containerRef = useRef(null);
   const videoRef = useRef(null);
@@ -45,6 +47,8 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     setIsPlaying(true);
     setIsMuted(false);
     setShowControls(true);
+    setIsLoading(true);
+    setHasError(false);
     resetControlsTimeout();
 
     const video = videoRef.current;
@@ -110,6 +114,8 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
               hls.recoverMediaError();
               break;
             default:
+              setIsLoading(false);
+              setHasError(true);
               hls.destroy();
               break;
           }
@@ -234,6 +240,38 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
     }
   };
 
+  const handleLoadedData = () => {
+    if (videoRef.current && videoRef.current.readyState >= 2) {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCanPlay = () => {
+    if (videoRef.current && videoRef.current.readyState >= 2) {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePlaying = () => {
+    setIsPlaying(true);
+    setIsLoading(false);
+  };
+
+  const handleWaiting = () => {
+    setIsLoading(true);
+  };
+
+  const handleStalled = () => {
+    if (videoRef.current && videoRef.current.readyState < 3) {
+      setIsLoading(true);
+    }
+  };
+
+  const handleError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
+
   const handleEnded = () => {
     setIsPlaying(false);
     setShowControls(true);
@@ -277,6 +315,12 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
         muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
+        onLoadedData={handleLoadedData}
+        onCanPlay={handleCanPlay}
+        onPlaying={handlePlaying}
+        onWaiting={handleWaiting}
+        onStalled={handleStalled}
+        onError={handleError}
         style={{
           width: '100%',
           height: '100%',
@@ -288,8 +332,20 @@ export default function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title
         }}
       />
 
-      {/* Center Play Button Overlay (ONLY shown when paused) */}
-      {!isPlaying && (
+      {/* Cinematic Video Loading Indicator */}
+      {isOpen && isLoading && !hasError && (
+        <div
+          className="video-loading-overlay video-modal-loading-overlay"
+          aria-live="polite"
+          aria-label="Loading video"
+        >
+          <div className="video-loading-spinner video-modal-loading-spinner" />
+          <span className="video-loading-text">LOADING VIDEO</span>
+        </div>
+      )}
+
+      {/* Center Play Button Overlay (ONLY shown when paused and NOT loading) */}
+      {!isPlaying && !isLoading && (
         <div
           style={{
             position: 'absolute',
