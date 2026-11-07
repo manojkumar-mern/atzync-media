@@ -225,7 +225,7 @@ export default function LazyVideo({
           aria-label="Loading video"
         >
           <div className="video-loading-spinner" />
-          <span className="video-loading-text">LOADING VIDEO</span>
+          <span className="video-loading-text">LOADING VIDEO...</span>
         </div>
       )}
     </div>
