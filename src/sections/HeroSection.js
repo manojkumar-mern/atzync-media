@@ -175,10 +175,23 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
           </div>
 
           {/* Oversized Kinetic Display Title with Typewriter Effect & Staggered Zig-Zag Offset */}
-          <div ref={titleWrapperRef} className="hero-display-wrapper film-crop-marks" style={{ marginTop: 'clamp(0.75rem, 2vh, 1.75rem)', position: 'relative' }}>
+          <h1
+            ref={titleWrapperRef}
+            className="hero-display-wrapper film-crop-marks"
+            aria-label="ATZYNC MEDIA"
+            style={{
+              margin: 0,
+              padding: 0,
+              fontSize: 'inherit',
+              fontWeight: 'inherit',
+              lineHeight: 'inherit',
+              marginTop: 'clamp(0.75rem, 2vh, 1.75rem)',
+              position: 'relative'
+            }}
+          >
             {/* Line 1: ATZYNC starting at left */}
-            <div className="hero-title-line flex-row items-center" style={{ width: '100%', justifyContent: 'flex-start' }}>
-              <h1 className="display-hero" style={{ opacity: isLoaded ? 1 : 0, display: 'inline-flex', letterSpacing: '0.02em' }}>
+            <span className="hero-title-line flex-row items-center" style={{ width: '100%', justifyContent: 'flex-start' }}>
+              <span className="display-hero" style={{ opacity: isLoaded ? 1 : 0, display: 'inline-flex', letterSpacing: '0.02em' }}>
                 {line1Chars.map((char, index) => {
                   const isVisible = typedCount1 === 0 ? true : index < typedCount1;
                   const isInitialInverted = index === 0; // 'A' in ATZYNC starts upside down on desktop
@@ -205,11 +218,11 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
                     </span>
                   );
                 })}
-              </h1>
-            </div>
+              </span>
+            </span>
 
             {/* Line 2: MEDIA starting directly below the 'N' of ATZYNC (Zig-Zag alignment) */}
-            <div
+            <span
               className="hero-title-line hero-title-line-secondary flex-row items-center"
               style={{
                 marginTop: '-0.15em',
@@ -219,7 +232,7 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
                 transition: 'padding-left 0.25s ease-out',
               }}
             >
-              <h1
+              <span
                 className="display-hero display-hero-outline"
                 style={{
                   opacity: isLoaded ? 1 : 0,
@@ -250,9 +263,9 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
                     </span>
                   );
                 })}
-              </h1>
-            </div>
-          </div>
+              </span>
+            </span>
+          </h1>
 
           {/* Subtitle & Brand Statement */}
           <div

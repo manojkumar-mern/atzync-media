@@ -211,7 +211,7 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
           </div>
 
           <p ref={textRef} className="body-lead" style={{ maxWidth: '720px', opacity: 0.88, fontSize: 'clamp(0.85rem, 1.2vw, 1.125rem)', color: 'rgba(255, 255, 255, 0.85)', textShadow: '0 2px 15px rgba(0,0,0,0.7)', textAlign: 'center' }}>
-            Connect directly with Atzyncmedia for commercial ad films, product photography, corporate videos, real estate videos, promotional videos, or Meta ads.
+            Connect directly with ATZYNC MEDIA for commercial ad films, product photography, corporate videos, real estate videos, promotional videos, or Meta ads.
           </p>
 
           <div

@@ -11,7 +11,7 @@ export const siteData = {
   },
   about: {
     headline: "WE CREATE CONTENT THAT MAKES BRANDS STAND OUT.",
-    description: "Atzyncmedia operates as a specialized video production and digital marketing studio. We blend high-fashion editorial visual aesthetics, mathematical pacing choreography, and bespoke sound architecture to engineer content that captures attention, drives engagement, and scales brand authority across modern screens.",
+    description: "ATZYNC MEDIA operates as a specialized video production and digital marketing studio. We blend high-fashion editorial visual aesthetics, mathematical pacing choreography, and bespoke sound architecture to engineer content that captures attention, drives engagement, and scales brand authority across modern screens.",
     founderText: "Managing Director — Thomash Murugesan",
   },
   contact: {
@@ -21,9 +21,9 @@ export const siteData = {
     whatsappUrl: "https://wa.me/919597127710",
     whatsappUrlSecondary: "https://wa.me/918838737598",
     email: "atzyncmedia@gmail.com",
-    youtubeUrl: "https://youtube.com/@atzyncmedia",
-    instagramUrl: "https://www.instagram.com/atzyncmedia?stkn=NXJyZDZiNXFjYjg5",
-    linkedinUrl: "https://linkedin.com/company/atzyncmedia",
+    youtubeUrl: "https://www.youtube.com/@atzyncmedia",
+    instagramUrl: "https://www.instagram.com/atzyncmedia/",
+    linkedinUrl: "https://www.linkedin.com/company/atzyncmedia/",
     location: "Global Remote Studio",
   },
   services: [

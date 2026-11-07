@@ -5,7 +5,7 @@ import SmoothScroll from '@/components/SmoothScroll';
 export const metadata = {
   metadataBase: new URL('https://www.atzyncmedia.com'),
   title: {
-    default: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
+    default: 'ATZYNC MEDIA | Video Production & Creative Studio',
     template: '%s | ATZYNC MEDIA',
   },
   description:
@@ -45,7 +45,7 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
+    title: 'ATZYNC MEDIA | Video Production & Creative Studio',
     description:
       'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
     url: 'https://www.atzyncmedia.com/',
@@ -63,7 +63,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ATZYNC MEDIA — A Mint of Creativity | Video Production & Marketing',
+    title: 'ATZYNC MEDIA | Video Production & Creative Studio',
     description:
       'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
     images: ['/images/hero-poster.webp'],
@@ -103,7 +103,7 @@ const jsonLd = {
       inLanguage: 'en-US',
     },
     {
-      '@type': 'Organization',
+      '@type': ['Organization', 'ProfessionalService'],
       '@id': 'https://www.atzyncmedia.com/#organization',
       name: 'ATZYNC MEDIA',
       alternateName: 'ATZYNCMEDIA',
@@ -112,6 +112,16 @@ const jsonLd = {
       slogan: 'A Mint of Creativity',
       description:
         'Premium video production and digital marketing studio crafting high-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing.',
+      knowsAbout: [
+        'Video Production',
+        'Commercial Ad Films',
+        'Corporate Videos',
+        'Brand Storytelling',
+        'Product Photography',
+        'Social Media Video Production',
+        'Post Production',
+        'Digital Marketing',
+      ],
       founder: {
         '@type': 'Person',
         name: 'Thomash Murugesan',
@@ -126,8 +136,9 @@ const jsonLd = {
         },
       ],
       sameAs: [
-        'https://www.instagram.com/atzyncmedia?stkn=NXJyZDZiNXFjYjg5',
-        'https://linkedin.com/company/atzyncmedia',
+        'https://www.youtube.com/@atzyncmedia',
+        'https://www.instagram.com/atzyncmedia/',
+        'https://www.linkedin.com/company/atzyncmedia/',
       ],
     },
   ],

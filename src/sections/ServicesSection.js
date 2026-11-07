@@ -145,6 +145,8 @@ export default function ServicesSection({ onOpenProjectModal }) {
         overflow: 'hidden',
       }}
     >
+      <h2 className="sr-only">SERVICES — Creative Video Production &amp; Digital Marketing</h2>
+
       {/* Pinned Kinetic Zoom Stage Overlay on "SERVICES" */}
       <div
         ref={zoomStageRef}
