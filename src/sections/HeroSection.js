@@ -135,15 +135,19 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
 
   return (
     <section ref={sectionRef} className="hero-section border-bottom" id="hero" style={{ position: 'relative' }}>
-      {/* Real Local Video Ambient Backdrop */}
+      {/* Real Local Video Ambient Backdrop with Cinematic Glow */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0.2,
+          opacity: 0.25,
           pointerEvents: 'none',
           overflow: 'hidden',
           zIndex: 0,
+          backgroundImage: 'url(/images/hero-poster.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'blur(24px) brightness(0.85)',
         }}
       >
         <video
@@ -154,12 +158,12 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
           preload={isLoaded ? 'metadata' : 'none'}
           src={isLoaded ? '/videos/project-01.mp4' : undefined}
           poster="/images/hero-poster.webp"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(24px) brightness(0.7)' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </div>
 
-      <div className="site-container flex-col" style={{ gap: 'var(--space-md)', position: 'relative', zIndex: 1 }}>
-        {/* FIRST FOLD: Takes 100% viewport height on mobile */}
+      <div className="site-container flex-col hero-site-container" style={{ gap: 'var(--space-md)', position: 'relative', zIndex: 1 }}>
+        {/* FIRST FOLD */}
         <div className="hero-first-fold-wrapper flex-col" style={{ gap: 'var(--space-md)' }}>
           {/* Header Metadata Ribbon */}
           <div

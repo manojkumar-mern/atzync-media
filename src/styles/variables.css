@@ -40,7 +40,8 @@
   --space-3xl: clamp(6rem, 8vw + 4rem, 12rem);
   
   /* Layout Bounds */
-  --max-width-site: 1600px;
+  --navbar-height: 77px;
+  --max-width-site: 100%;
   --max-width-narrow: 900px;
   --gutter-mobile: 1.25rem;
   --gutter-desktop: 3.5rem;

@@ -5,7 +5,7 @@
   font-size: clamp(2.2rem, 9.5vw, 8.5rem);
   font-weight: 800;
   line-height: 0.92;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--text-primary);
   word-break: normal;
@@ -144,5 +144,103 @@
   .meta-tag, .timecode-tag, .badge-tag {
     font-size: 0.6875rem !important;
     letter-spacing: 0.08em !important;
+  }
+}
+
+/* ==========================================================================
+   Desktop & Large-Monitor Typography Lock (>= 1440px)
+   Matches the authoritative 1920x1080 production reference values and preserves
+   them across larger desktop screens (1440px, 1600px, 1920px, 2560px and beyond).
+   Prevents excessive viewport-width-based font scaling on large/ultrawide displays
+   while allowing layouts, containers, and spacing to expand naturally.
+   ========================================================================== */
+@media (min-width: 1440px) {
+  .display-hero {
+    font-size: 8.5rem; /* 136px — Exact 1920x1080 production reference */
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    font-weight: 800;
+  }
+
+  #cta .display-hero {
+    font-size: 5.5rem; /* 88px — Exact 1920x1080 production reference */
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+  }
+
+  .display-title {
+    font-size: 2.5rem; /* 40px — Exact 1920x1080 production reference */
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+  }
+
+  .heading-lg {
+    font-size: 3rem; /* 48px — Exact 1920x1080 production reference */
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .heading-md {
+    font-size: 2.125rem; /* 34px — Exact 1920x1080 production reference */
+    line-height: 1.25;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+
+  .subheading {
+    font-size: 0.95rem; /* 15.2px — Exact 1920x1080 production reference */
+    letter-spacing: 0.14em; /* 2.128px — Exact 1920x1080 production reference */
+    font-weight: 600;
+  }
+
+  .body-lead {
+    font-size: 1.375rem; /* 22px — Exact 1920x1080 production reference */
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  .body-regular {
+    font-size: 1.0625rem; /* 17px — Exact 1920x1080 production reference */
+    line-height: 1.65;
+    font-weight: 400;
+  }
+
+  .meta-tag {
+    font-size: 0.75rem; /* 12px — Exact 1920x1080 production reference */
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+
+  .badge-tag {
+    font-size: 0.75rem; /* 12px — Exact 1920x1080 production reference */
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+
+  .timecode-tag {
+    font-size: 0.8125rem; /* 13px — Exact 1920x1080 production reference */
+    letter-spacing: 0.18em;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    font-size: 0.875rem; /* 14px — Exact 1920x1080 production reference */
+    letter-spacing: 0.12em;
+    font-weight: 700;
+  }
+
+  .btn-secondary {
+    font-size: 0.75rem; /* 12px — Exact 1920x1080 production reference */
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+
+  .nav-link-item {
+    font-size: 0.8125rem; /* 13px — Exact 1920x1080 production reference */
+    letter-spacing: 0.14em;
+    font-weight: 500;
   }
 }

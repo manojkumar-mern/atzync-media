@@ -584,13 +584,39 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding-top: clamp(6.5rem, 11vh, 8.5rem);
+  min-height: 100dvh;
+  padding-top: clamp(6.75rem, 11vh, 8.5rem);
   padding-bottom: var(--space-xl);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-sizing: border-box;
   overflow: hidden;
   background-color: var(--bg-primary);
+}
+
+.hero-site-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-first-fold-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.hero-meta-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .hero-display-wrapper {
@@ -598,6 +624,10 @@
   flex-direction: column;
   position: relative;
   z-index: 2;
+  perspective: 1000px;
+  margin: 0;
+  margin-top: clamp(0.75rem, 2vh, 1.75rem);
+  flex-shrink: 0;
 }
 
 .hero-title-line {
@@ -607,8 +637,22 @@
   width: 100%;
 }
 
-.hero-display-wrapper {
-  perspective: 1000px;
+.hero-statement-grid {
+  margin-top: clamp(2.25rem, 5vh, 4rem);
+  flex-shrink: 0;
+}
+
+.hero-statement-grid .hero-text-col {
+  max-width: 730px;
+}
+
+.hero-statement-grid .hero-paragraph {
+  max-width: 730px;
+}
+
+.hero-cta-wrapper {
+  margin-top: clamp(2rem, 4.5vh, 3.5rem);
+  flex-shrink: 0;
 }
 
 .hero-letter-box {
@@ -783,14 +827,7 @@
   transform: scale(1.04);
 }
 
-/* Hero Section First & Second Fold Wrappers */
-.hero-first-fold-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  width: 100%;
-}
-
+/* Hero Section Second Fold Wrapper */
 .hero-second-fold-wrapper {
   display: flex;
   flex-direction: column;
@@ -816,7 +853,7 @@
     padding: 0 !important;
   }
 
-  /* Mobile Entrance Alignment & Typography Spacing */
+  /* Mobile Responsive Optimization for Hero Section */
   .hero-section {
     height: 100dvh !important;
     height: 100vh !important;
@@ -831,6 +868,7 @@
     overflow: hidden !important;
   }
 
+  .hero-site-container,
   .hero-section .site-container {
     display: flex !important;
     flex-direction: column !important;
@@ -839,6 +877,7 @@
     height: 100% !important;
     justify-content: space-between !important;
     box-sizing: border-box !important;
+    gap: 0 !important;
   }
 
   /* First Fold: Full mobile viewport height with perfectly even space distribution */
@@ -892,7 +931,8 @@
     text-align: center !important;
     align-items: center !important;
     justify-content: center !important;
-    margin: 0 !important;
+    margin-top: clamp(0.75rem, 2vh, 1.5rem) !important;
+    margin-bottom: 0 !important;
   }
 
   .display-hero {
@@ -915,7 +955,8 @@
   }
 
   .hero-statement-grid {
-    margin: 0 !important;
+    margin-top: clamp(1.25rem, 3vh, 2.25rem) !important;
+    margin-bottom: 0 !important;
     gap: 0.45rem !important;
     width: 100% !important;
     text-align: center !important;
@@ -962,7 +1003,8 @@
   }
 
   .hero-cta-wrapper {
-    margin: 0 !important;
+    margin-top: clamp(1.5rem, 3.5vh, 2.5rem) !important;
+    margin-bottom: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -1083,6 +1125,94 @@
     align-items: center !important;
     gap: 0.4rem !important;
     text-align: center !important;
+  }
+}
+
+/* ==========================================================================
+   Medium-Height Laptop Viewports (<= 800px)
+   Balances top padding and gaps so laptop screens (1280x720, etc.) remain comfortable
+   ========================================================================== */
+@media (max-height: 800px) and (min-height: 701px) {
+  .hero-section {
+    padding-top: calc(var(--navbar-height, 68px) + clamp(1rem, 4.5vh, 2.5rem)) !important;
+  }
+}
+
+/* ==========================================================================
+   Compact Laptop Viewports (max-height: 800px and min-width: 768px)
+   Balances top and bottom padding so the hero first fold fits within the screen
+   ========================================================================== */
+@media (max-height: 800px) and (min-width: 768px) {
+  .hero-section {
+    padding-top: clamp(6.75rem, 11vh, 8.5rem) !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+/* ==========================================================================
+   Tall Desktop & Workstation Displays (min-height: 1081px and min-width: 1025px)
+   Progressively expands vertical separation between the 4 hero groups
+   ========================================================================== */
+@media (min-height: 1081px) and (min-width: 1025px) {
+  .hero-section {
+    padding-top: calc(var(--navbar-height, 77px) + clamp(3rem, 12vh, 16rem)) !important;
+    padding-bottom: clamp(3rem, 15vh, 20rem) !important;
+    justify-content: flex-start !important;
+  }
+
+  .hero-first-fold-wrapper {
+    gap: clamp(2rem, 4.5vh, 5rem) !important;
+  }
+
+  .hero-display-wrapper {
+    margin-top: clamp(1rem, 2.5vh, 3.5rem) !important;
+  }
+
+  .hero-statement-grid {
+    margin-top: clamp(2.5rem, 6vh, 7rem) !important;
+  }
+
+  .hero-cta-wrapper {
+    margin-top: clamp(2.5rem, 6vh, 7rem) !important;
+  }
+}
+
+/* ==========================================================================
+   Extreme Short-Height Viewports (Mobile Landscape <= 480px)
+   Prevents content clipping, overlap, and guarantees natural page scrollability
+   ========================================================================== */
+@media (max-height: 480px) {
+  .hero-section {
+    min-height: auto !important;
+    padding-top: calc(var(--navbar-height, 68px) + 0.4rem) !important;
+    padding-bottom: 1.5rem !important;
+    overflow-y: visible !important;
+  }
+
+  .hero-site-container {
+    flex: none !important;
+    height: auto !important;
+    justify-content: flex-start !important;
+  }
+
+  .hero-first-fold-wrapper {
+    justify-content: flex-start !important;
+    flex: none !important;
+    height: auto !important;
+    max-height: none !important;
+    gap: 0.75rem !important;
+  }
+
+  .hero-display-wrapper {
+    margin: 0 !important;
+  }
+
+  .hero-statement-grid {
+    margin: 0 !important;
+  }
+
+  .hero-cta-wrapper {
+    margin: 0 !important;
   }
 }
 
