@@ -33,6 +33,7 @@ export const siteData = {
       title: "Commercial Ad Film",
       tagline: "High-octane commercial ad films optimized for broadcast & web campaigns.",
       description: "Fast-paced, commercial editing engineered to capture immediate audience attention within seconds and drive conversion.",
+      image: "/images/01-commercial-ad-film.webp",
     },
     {
       id: "product-photography",
@@ -40,6 +41,7 @@ export const siteData = {
       title: "Product Photography",
       tagline: "High-end product visual styling, studio lighting, and post-production.",
       description: "Bespoke studio photography, high-detail retouching, and product visual suites tailored for e-commerce and brand campaigns.",
+      image: "/images/02-product-photography.webp",
     },
     {
       id: "corporate-videos",
@@ -47,6 +49,7 @@ export const siteData = {
       title: "Corporate Videos",
       tagline: "Executive brand storytelling, corporate identity, and internal communications.",
       description: "Polished corporate video suites, executive interviews, and brand documentary films engineered for corporate authority.",
+      image: "/images/03-corporate-videos.webp",
     },
     {
       id: "real-estate-videos",
@@ -54,6 +57,7 @@ export const siteData = {
       title: "Real Estate Videos",
       tagline: "Precision architectural walkthroughs, luxury property pacing, and color grading.",
       description: "Mathematical cutting precision, high-end property walkthrough assembly, color grading, sound design, and master export suites.",
+      image: "/images/04-real-estate-videos.webp",
     },
     {
       id: "promotional-videos",
@@ -61,6 +65,7 @@ export const siteData = {
       title: "Promotional Videos",
       tagline: "Dynamic brand promo videos engineered to drive campaign engagement.",
       description: "Platform-optimized visual storytelling, motion graphics integration, and rhythmic cuts tailored for maximum audience retention.",
+      image: "/images/05-promotional-videos.webp",
     },
     {
       id: "meta-ads",
@@ -68,6 +73,7 @@ export const siteData = {
       title: "Meta Ads",
       tagline: "High-converting Facebook & Instagram ad creative suites.",
       description: "Data-driven performance ad video edits, hook-based creative variations, and scale-ready Meta campaign visual assets.",
+      image: "/images/06-meta-ads.webp",
     },
   ],
   processSteps: [

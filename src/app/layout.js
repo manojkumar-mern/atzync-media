@@ -5,8 +5,8 @@ import SmoothScroll from '@/components/SmoothScroll';
 export const metadata = {
   metadataBase: new URL('https://www.atzyncmedia.com'),
   title: {
-    default: 'ATZYNC MEDIA | Video Production & Creative Studio',
-    template: '%s | ATZYNC MEDIA',
+    default: 'Atzync Media',
+    template: '%s | Atzync Media',
   },
   description:
     'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
@@ -22,9 +22,9 @@ export const metadata = {
     'Post Production',
     'Creative Studio',
   ],
-  authors: [{ name: 'ATZYNC MEDIA' }],
-  creator: 'ATZYNC MEDIA',
-  publisher: 'ATZYNC MEDIA',
+  authors: [{ name: 'Atzync Media' }],
+  creator: 'Atzync Media',
+  publisher: 'Atzync Media',
   formatDetection: {
     email: false,
     address: false,
@@ -45,11 +45,11 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'ATZYNC MEDIA | Video Production & Creative Studio',
+    title: 'Atzync Media',
     description:
       'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
     url: 'https://www.atzyncmedia.com/',
-    siteName: 'ATZYNC MEDIA',
+    siteName: 'Atzync Media',
     images: [
       {
         url: '/images/hero-poster.webp',
@@ -63,7 +63,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ATZYNC MEDIA | Video Production & Creative Studio',
+    title: 'Atzync Media',
     description:
       'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing engineered for modern brands.',
     images: ['/images/hero-poster.webp'],
@@ -93,7 +93,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': 'https://www.atzyncmedia.com/#website',
       url: 'https://www.atzyncmedia.com/',
-      name: 'ATZYNC MEDIA',
+      name: 'Atzync Media',
       alternateName: 'ATZYNCMEDIA',
       description:
         'ATZYNC MEDIA — A Mint of Creativity. High-impact Branding Films, Commercials, Social Media Videos, and Digital Marketing.',
@@ -105,7 +105,7 @@ const jsonLd = {
     {
       '@type': ['Organization', 'ProfessionalService'],
       '@id': 'https://www.atzyncmedia.com/#organization',
-      name: 'ATZYNC MEDIA',
+      name: 'Atzync Media',
       alternateName: 'ATZYNCMEDIA',
       url: 'https://www.atzyncmedia.com/',
       logo: 'https://www.atzyncmedia.com/logo-white.png',

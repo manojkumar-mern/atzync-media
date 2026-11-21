@@ -6,17 +6,17 @@ export const metadata = {
     canonical: '/work',
   },
   openGraph: {
-    title: 'Selected Work & Portfolio | ATZYNC MEDIA',
+    title: 'Selected Work & Portfolio | Atzync Media',
     description:
       'Explore high-impact branding films, commercial ads, social media videos, and performance digital creative produced by ATZYNC MEDIA.',
     url: 'https://www.atzyncmedia.com/work',
-    siteName: 'ATZYNC MEDIA',
+    siteName: 'Atzync Media',
     images: [
       {
         url: '/images/hero-poster.webp',
         width: 960,
         height: 536,
-        alt: 'ATZYNC MEDIA — Selected Work & Showreel',
+        alt: 'Atzync Media — Selected Work & Showreel',
       },
     ],
     locale: 'en_US',
@@ -24,7 +24,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Selected Work & Portfolio | ATZYNC MEDIA',
+    title: 'Selected Work & Portfolio | Atzync Media',
     description:
       'Explore high-impact branding films, commercial ads, social media videos, and performance digital creative produced by ATZYNC MEDIA.',
     images: ['/images/hero-poster.webp'],
