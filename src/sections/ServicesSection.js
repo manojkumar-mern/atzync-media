@@ -13,19 +13,27 @@ export default function ServicesSection({ onOpenProjectModal }) {
   const zoomTextRef = useRef(null);
   const cardsGridRef = useRef(null);
 
+  const serviceImageMap = {
+    'commercial-ad-film': '/images/01-commercial-ad-film.webp',
+    'product-photography': '/images/02-product-photography.webp',
+    'corporate-videos': '/images/03-corporate-videos.webp',
+    'real-estate-videos': '/images/04-real-estate-videos.webp',
+    'promotional-videos': '/images/05-promotional-videos.webp',
+    'meta-ads': '/images/06-meta-ads.webp',
+  };
+
   const serviceImages = [
-    '/images/project-01.webp',
-    '/images/project-02.webp',
-    '/images/project-03.webp',
-    '/images/studio-suite.webp',
-    '/images/hero-poster.webp',
-    '/images/brand-poster.webp',
-    '/images/color-after.webp',
+    '/images/01-commercial-ad-film.webp',
+    '/images/02-product-photography.webp',
+    '/images/03-corporate-videos.webp',
+    '/images/04-real-estate-videos.webp',
+    '/images/05-promotional-videos.webp',
+    '/images/06-meta-ads.webp',
   ];
 
   const serviceItems = siteData.services.map((srv, idx) => ({
     ...srv,
-    image: serviceImages[idx % serviceImages.length],
+    image: srv.image || serviceImageMap[srv.id] || serviceImages[idx % serviceImages.length],
   }));
 
   useEffect(() => {
