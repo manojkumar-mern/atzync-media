@@ -101,8 +101,8 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
         {/* Section Header */}
         <div className="flex-col items-center scroll-reveal stagger-1" style={{ gap: '0.35rem', textAlign: 'center' }}>
           <h2
+            className="cta-eyebrow"
             style={{
-              fontSize: 'clamp(1.25rem, 2.4vw, 1.85rem)',
               fontFamily: 'var(--font-heading)',
               fontWeight: 800,
               color: 'rgba(255, 255, 255, 0.9)',
@@ -120,11 +120,10 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
         <div className="flex-col scroll-reveal stagger-2" style={{ gap: '0.75rem', width: '100%', margin: '0.5rem 0 1.5rem 0', overflow: 'hidden' }}>
           <div ref={marquee1Ref} style={{ willChange: 'transform', width: '100%' }}>
             <div
-              className="flex-row items-center marquee-band-left"
+              className="flex-row items-center marquee-band-left cta-marquee-band"
               style={{
                 gap: '2rem',
                 whiteSpace: 'nowrap',
-                fontSize: 'clamp(1.4rem, 4.5vw, 4rem)',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
                 letterSpacing: '0.05em',
@@ -142,11 +141,10 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
 
           <div ref={marquee2Ref} style={{ willChange: 'transform', width: '100%' }}>
             <div
-              className="flex-row items-center marquee-band-right"
+              className="flex-row items-center marquee-band-right cta-marquee-band"
               style={{
                 gap: '2rem',
                 whiteSpace: 'nowrap',
-                fontSize: 'clamp(1.4rem, 4.5vw, 4rem)',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
                 letterSpacing: '0.05em',
@@ -166,10 +164,9 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
 
         {/* Action Content Layer */}
         <div
-          className="flex-col items-center scroll-reveal stagger-2"
+          className="cta-action-box flex-col items-center scroll-reveal stagger-2"
           style={{
             width: '100%',
-            maxWidth: '1000px',
             padding: 'clamp(1rem, 3.5vw, 3rem) var(--space-md)',
             gap: 'var(--space-md)',
             position: 'relative',
@@ -190,14 +187,13 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
           </div>
 
           <div className="flex-col items-center" style={{ gap: '0.5rem' }}>
-            <span className="subheading" style={{ fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)', color: 'rgba(255, 255, 255, 0.85)', textAlign: 'center' }}>
+            <span className="subheading cta-prompt" style={{ color: 'rgba(255, 255, 255, 0.85)', textAlign: 'center' }}>
               HAVE A PROJECT IN MIND? LET&apos;S TALK.
             </span>
             <h2
               ref={titleRef}
-              className="display-hero"
+              className="display-hero cta-headline"
               style={{
-                fontSize: 'clamp(1.6rem, 5.5vw, 5.5rem)',
                 lineHeight: 1.08,
                 letterSpacing: '-0.02em',
                 maxWidth: '100%',
@@ -210,7 +206,7 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
             </h2>
           </div>
 
-          <p ref={textRef} className="body-lead" style={{ maxWidth: '720px', opacity: 0.88, fontSize: 'clamp(0.85rem, 1.2vw, 1.125rem)', color: 'rgba(255, 255, 255, 0.85)', textShadow: '0 2px 15px rgba(0,0,0,0.7)', textAlign: 'center' }}>
+          <p ref={textRef} className="body-lead cta-lead" style={{ opacity: 0.88, color: 'rgba(255, 255, 255, 0.85)', textShadow: '0 2px 15px rgba(0,0,0,0.7)', textAlign: 'center' }}>
             Connect directly with ATZYNC MEDIA for commercial ad films, product photography, corporate videos, real estate videos, promotional videos, or Meta ads.
           </p>
 
@@ -223,10 +219,8 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
                 soundManager.playClick();
                 if (onOpenProjectModal) onOpenProjectModal();
               }}
-              className="btn-secondary"
+              className="btn-secondary cta-start-btn"
               style={{
-                padding: '0.85rem 2.2rem',
-                fontSize: '0.82rem',
                 fontWeight: 700,
                 letterSpacing: '0.08em',
                 maxWidth: '100%',

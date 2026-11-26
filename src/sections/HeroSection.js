@@ -27,19 +27,22 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
   useEffect(() => {
     if (!isLoaded) return;
 
-    let idx1 = 0;
+    let idx1 = 1;
     let idx2 = 0;
+    let timer2 = null;
+
+    setTypedCount1(1);
 
     const timer1 = setInterval(() => {
+      idx1++;
       if (idx1 <= line1Chars.length) {
         setTypedCount1(idx1);
-        idx1++;
       } else {
         clearInterval(timer1);
-        const timer2 = setInterval(() => {
+        timer2 = setInterval(() => {
+          idx2++;
           if (idx2 <= line2Chars.length) {
             setTypedCount2(idx2);
-            idx2++;
           } else {
             clearInterval(timer2);
           }
@@ -49,6 +52,7 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
 
     return () => {
       clearInterval(timer1);
+      if (timer2) clearInterval(timer2);
     };
   }, [isLoaded]);
 
@@ -70,12 +74,21 @@ export default function HeroSection({ isLoaded, onOpenModal, onOpenProjectModal 
 
     updateIndent();
     window.addEventListener('resize', updateIndent);
+    if (typeof document !== 'undefined' && document.fonts?.ready) {
+      document.fonts.ready.then(updateIndent).catch(() => {});
+    }
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined' && titleWrapperRef.current) {
+      ro = new ResizeObserver(updateIndent);
+      ro.observe(titleWrapperRef.current);
+    }
     const t1 = setTimeout(updateIndent, 80);
     const t2 = setTimeout(updateIndent, 300);
     const t3 = setTimeout(updateIndent, 800);
 
     return () => {
       window.removeEventListener('resize', updateIndent);
+      if (ro) ro.disconnect();
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);

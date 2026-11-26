@@ -213,11 +213,11 @@ export default function ServicesSection({ onOpenProjectModal }) {
         {/* Vector SVG Word: SERVICES */}
         <div
           ref={zoomTextRef}
+          className="services-zoom-word-wrap"
           style={{
             position: 'relative',
             zIndex: 5,
             width: '90vw',
-            maxWidth: '1200px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

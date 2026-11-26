@@ -1,6 +1,13 @@
+import { Arimo } from 'next/font/google';
 import '@/styles/globals.css';
 import '@/styles/admin.css';
 import SmoothScroll from '@/components/SmoothScroll';
+
+const arimo = Arimo({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-arimo',
+});
 
 export const metadata = {
   metadataBase: new URL('https://www.atzyncmedia.com'),
@@ -146,7 +153,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={arimo.variable}>
       <head>
         <script
           type="application/ld+json"

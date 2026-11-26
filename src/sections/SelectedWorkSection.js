@@ -105,17 +105,15 @@ export default function SelectedWorkSection({ onOpenModal }) {
       >
         {/* Section Header */}
         <div className="flex-row items-center justify-between scroll-reveal stagger-1" style={{ zIndex: 10, gap: '0.5rem 1rem', width: '100%', alignItems: 'center' }}>
-          <h2 className="heading-lg" style={{ fontSize: 'clamp(1.15rem, 3.2vw, 3rem)', color: 'var(--text-dark-primary)', margin: 0 }}>
+          <h2 className="heading-lg work-section-title" style={{ color: 'var(--text-dark-primary)', margin: 0 }}>
             FEATURED PORTFOLIO
           </h2>
           <div className="flex-row items-center justify-end" style={{ gap: '0.45rem', marginLeft: 'auto', flexShrink: 0 }}>
-            <span className="meta-tag" style={{ color: 'var(--text-dark-muted)', fontWeight: 600, fontSize: '0.7rem' }}>0{activeProjectIndex + 1} / 0{projects.length}</span>
+            <span className="meta-tag work-counter" style={{ color: 'var(--text-dark-muted)', fontWeight: 600 }}>0{activeProjectIndex + 1} / 0{projects.length}</span>
             <Link
               href="/work"
-              className="btn-secondary"
+              className="btn-secondary work-all-btn"
               style={{
-                padding: '0.35rem 0.8rem',
-                fontSize: '0.68rem',
                 borderRadius: '20px',
                 backgroundColor: 'var(--bg-primary)',
                 color: 'var(--text-primary)',
@@ -286,13 +284,13 @@ export default function SelectedWorkSection({ onOpenModal }) {
 
         {/* Bottom Progress Nav — dots + bar + counter */}
         <div
+          className="portfolio-bottom-nav"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.6rem',
             zIndex: 10,
             paddingTop: '0.5rem',
-            maxWidth: '1240px',
             width: '100%',
             margin: '0 auto',
           }}
@@ -344,9 +342,9 @@ export default function SelectedWorkSection({ onOpenModal }) {
 
           {/* Right counter */}
           <span
+            className="work-bottom-counter"
             style={{
               fontFamily: 'var(--font-heading)',
-              fontSize: '0.65rem',
               letterSpacing: '0.1em',
               color: 'var(--text-dark-muted)',
               fontWeight: 600,

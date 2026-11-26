@@ -13,9 +13,10 @@ export default function FooterSection() {
               alt="ATZYNC Media"
               loading="lazy"
               decoding="async"
-              style={{ height: 'clamp(45px, 4.5vw, 65px)', width: 'auto', objectFit: 'contain' }}
+              className="footer-brand-logo"
+              style={{ width: 'auto', objectFit: 'contain' }}
             />
-            <span className="subheading" style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.7)' }}>{siteData.tagline}</span>
+            <span className="subheading footer-tagline" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{siteData.tagline}</span>
           </div>
 
           <div className="flex-row items-center" style={{ gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -97,10 +98,10 @@ export default function FooterSection() {
             borderColor: 'rgba(255, 255, 255, 0.12)',
           }}
         >
-          <span className="meta-tag" style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+          <span className="meta-tag footer-legal-tag" style={{ color: 'rgba(255, 255, 255, 0.7)', letterSpacing: '0.08em' }}>
             © {new Date().getFullYear()} {siteData.name}. ALL RIGHTS RESERVED.
           </span>
-          <span className="meta-tag" style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+          <span className="meta-tag footer-legal-tag" style={{ color: 'rgba(255, 255, 255, 0.7)', letterSpacing: '0.08em' }}>
             {siteData.statement}
           </span>
         </div>

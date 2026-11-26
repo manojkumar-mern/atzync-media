@@ -148,8 +148,8 @@ export default function AboutSection() {
             {/* Section Header on the Right Side */}
             <div className="flex-col scroll-reveal stagger-1" style={{ gap: '0.5rem' }}>
               <h2
+                className="about-eyebrow"
                 style={{
-                  fontSize: 'clamp(1.1rem, 2vw, 1.4rem)',
                   fontFamily: 'var(--font-heading)',
                   fontWeight: 800,
                   color: 'var(--text-dark-muted)',
@@ -162,8 +162,8 @@ export default function AboutSection() {
                 ABOUT US
               </h2>
               <h3
+                className="about-headline"
                 style={{
-                  fontSize: 'clamp(1.5rem, 3.2vw, 2.5rem)',
                   fontFamily: 'var(--font-heading)',
                   color: 'var(--text-dark-primary)',
                   fontWeight: 800,
@@ -175,13 +175,13 @@ export default function AboutSection() {
               </h3>
             </div>
 
-            <p className="body-lead scroll-reveal stagger-3" style={{ fontSize: 'clamp(1.05rem, 1.4vw, 1.25rem)', color: 'var(--text-dark-primary)' }}>
+            <p className="body-lead about-desc scroll-reveal stagger-3" style={{ color: 'var(--text-dark-primary)' }}>
               {siteData.about.description}
             </p>
 
             {/* Founder / Managing Director Highlight Card */}
             <div
-              className="scroll-reveal stagger-4"
+              className="about-director-card scroll-reveal stagger-4"
               style={{
                 background: 'linear-gradient(135deg, rgba(7, 8, 12, 0.05) 0%, rgba(7, 8, 12, 0.02) 100%)',
                 border: '1px solid rgba(7, 8, 12, 0.12)',
@@ -198,17 +198,17 @@ export default function AboutSection() {
               }}
             >
               <div className="flex-col" style={{ gap: '0.25rem' }}>
-                <span style={{ fontWeight: '800', fontSize: '1.05rem', color: 'var(--text-dark-primary)', letterSpacing: '0.02em' }}>
+                <span className="about-director-name" style={{ fontWeight: '800', color: 'var(--text-dark-primary)', letterSpacing: '0.02em' }}>
                   {siteData.founder.name}
                 </span>
-                <span className="subheading" style={{ fontSize: '0.75rem', color: 'var(--text-dark-secondary)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                <span className="subheading about-director-role" style={{ color: 'var(--text-dark-secondary)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                   {siteData.founder.role}
                 </span>
               </div>
 
               <span
+                className="about-director-badge"
                 style={{
-                  fontSize: '0.625rem',
                   fontWeight: 700,
                   letterSpacing: '0.12em',
                   padding: '0.35rem 0.75rem',
@@ -229,10 +229,10 @@ export default function AboutSection() {
             <div ref={statsRef} className="grid-3col border-top" style={{ paddingTop: 'var(--space-md)', gap: '1rem', borderTopColor: 'var(--border-light-subtle)' }}>
               {stats.map((stat, i) => (
                 <div key={i} className={`flex-col items-center scroll-reveal stagger-${i + 3}`} style={{ gap: '0.25rem', textAlign: 'center' }}>
-                  <span className="display-title" style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', color: 'var(--text-dark-primary)', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>
+                  <span className="display-title about-stat-value" style={{ color: 'var(--text-dark-primary)', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>
                     {animatedStats[i] || stat.value}
                   </span>
-                  <span className="meta-tag" style={{ fontSize: '0.6875rem', color: 'var(--text-dark-muted)', textAlign: 'center' }}>
+                  <span className="meta-tag about-stat-label" style={{ color: 'var(--text-dark-muted)', textAlign: 'center' }}>
                     {stat.label}
                   </span>
                 </div>

@@ -91,7 +91,8 @@
 /* Mobile Typography Rules (< 768px) */
 @media (max-width: 767px) {
   .display-hero {
-    font-size: clamp(2.4rem, 10.5vw, 3.25rem) !important;
+    font-size: clamp(2.75rem, 12.2vw, 3.75rem) !important;
+    font-weight: 800 !important;
     line-height: 0.98 !important;
     letter-spacing: 0.02em !important;
     word-break: normal !important;
@@ -242,5 +243,67 @@
     font-size: 0.8125rem; /* 13px — Exact 1920x1080 production reference */
     letter-spacing: 0.14em;
     font-weight: 500;
+  }
+}
+
+@media (min-width: 1680px) {
+  .body-lead {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Large Monitor & Ultrawide Scaling (> 1920px: 2K QHD, 3440px Ultrawide, 4K)
+   Preserves laptop (<= 1536px) and 1080p styles untouched while proportionally
+   scaling typography and expanding text width across large external monitors.
+   ========================================================================== */
+@media (min-width: 1921px) {
+  .display-hero {
+    font-size: clamp(8.5rem, 7.6vw, 18rem);
+  }
+
+  #cta .display-hero {
+    font-size: clamp(5.5rem, 5vw, 11rem);
+  }
+
+  .display-title {
+    font-size: clamp(2.5rem, 2.6vw, 5.5rem);
+  }
+
+  .heading-lg {
+    font-size: clamp(3rem, 3vw, 6.25rem);
+  }
+
+  .heading-md {
+    font-size: clamp(2.125rem, 2.2vw, 4.75rem);
+  }
+
+  .subheading {
+    font-size: clamp(0.95rem, 0.85vw, 1.85rem);
+  }
+
+  .body-lead {
+    font-size: clamp(1.375rem, 1.3vw, 2.75rem);
+    max-width: 100%;
+  }
+
+  .body-regular {
+    font-size: clamp(1.0625rem, 1vw, 2.15rem);
+  }
+
+  .meta-tag,
+  .badge-tag,
+  .timecode-tag {
+    font-size: clamp(0.75rem, 0.68vw, 1.45rem);
+  }
+
+  .nav-link-item {
+    font-size: clamp(0.8125rem, 0.72vw, 1.45rem);
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    font-size: clamp(0.875rem, 0.75vw, 1.5rem);
+    padding: clamp(0.85rem, 0.8vw, 1.5rem) clamp(1.75rem, 1.8vw, 3.25rem);
   }
 }

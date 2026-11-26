@@ -936,11 +936,16 @@
   }
 
   .display-hero {
-    font-size: clamp(2.6rem, 11.5vw, 3.5rem) !important;
+    font-size: clamp(2.75rem, 12.2vw, 3.75rem) !important;
+    font-weight: 800 !important;
     line-height: 0.98 !important;
     text-align: center !important;
     letter-spacing: 0.02em !important;
     justify-content: center !important;
+  }
+
+  .display-hero-outline {
+    -webkit-text-stroke: 1.25px var(--text-primary) !important;
   }
 
   .hero-title-line,
@@ -1174,6 +1179,88 @@
 
   .hero-cta-wrapper {
     margin-top: clamp(2.5rem, 6vh, 7rem) !important;
+  }
+}
+
+/* ==========================================================================
+   Large Monitors (>= 1680px & >= 1921px: QHD, Ultrawide, 4K Displays)
+   Expands content cleanly across the full display width without empty corners,
+   leaving laptop viewports (1280px–1600px) 100% untouched.
+   ========================================================================== */
+@media (min-width: 1680px) {
+  .hero-statement-grid .hero-text-col,
+  .hero-statement-grid .hero-paragraph {
+    max-width: 100%;
+  }
+
+  .hero-statement-grid .hero-paragraph {
+    padding-left: clamp(2rem, 4vw, 6rem) !important;
+  }
+}
+
+@media (min-width: 1921px) {
+  :root {
+    --gutter-desktop: clamp(3.5rem, 3.2vw, 7rem);
+    --navbar-height: clamp(77px, 4.5vw, 130px);
+  }
+
+  .navbar-header {
+    padding-top: clamp(1rem, 1vw, 2rem);
+    padding-bottom: clamp(1rem, 1vw, 2rem);
+  }
+
+  .brand-logo img {
+    height: clamp(44px, 2.3vw, 84px) !important;
+  }
+
+  .brand-logo .status-dot {
+    width: clamp(7px, 0.45vw, 13px);
+    height: clamp(7px, 0.45vw, 13px);
+  }
+
+  .desktop-nav {
+    gap: clamp(2.5rem, 2.2vw, 4.5rem) !important;
+  }
+
+  .desktop-nav > div {
+    gap: clamp(2rem, 1.8vw, 3.75rem) !important;
+  }
+
+  .desktop-nav .btn-secondary {
+    padding: clamp(0.55rem, 0.55vw, 1.05rem) clamp(1.4rem, 1.3vw, 2.5rem) !important;
+    font-size: clamp(0.75rem, 0.7vw, 1.35rem) !important;
+    border-radius: 999px;
+  }
+
+  .hero-section {
+    justify-content: space-between !important;
+    padding-top: calc(var(--navbar-height, 77px) + clamp(2.5rem, 5vh, 5rem)) !important;
+    padding-bottom: clamp(2.5rem, 5vh, 5rem) !important;
+  }
+
+  .hero-site-container,
+  .hero-first-fold-wrapper {
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .hero-meta-ribbon .badge-tag {
+    font-size: clamp(0.75rem, 0.68vw, 1.4rem) !important;
+    padding: clamp(0.45rem, 0.45vw, 0.9rem) clamp(1.1rem, 1vw, 2rem) !important;
+    border-radius: 999px;
+  }
+
+  .hero-scroll-cue .meta-tag {
+    font-size: clamp(0.6875rem, 0.65vw, 1.35rem) !important;
+  }
+
+  .hero-scroll-cue svg {
+    width: clamp(14px, 0.9vw, 26px);
+    height: clamp(14px, 0.9vw, 26px);
+  }
+
+  .display-hero-outline {
+    -webkit-text-stroke: clamp(1.5px, 0.11vw, 3px) var(--text-primary);
   }
 }
 
@@ -2209,6 +2296,267 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* ==========================================================================
+   Lower Section Base Hooks (Preserve Mobile / Laptop <= 1920px Identically)
+   ========================================================================== */
+.about-eyebrow {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+.about-headline {
+  font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+}
+
+.about-desc {
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+}
+
+.about-director-name {
+  font-size: 1.05rem;
+}
+
+.about-director-role {
+  font-size: 0.75rem;
+}
+
+.about-director-badge {
+  font-size: 0.625rem;
+}
+
+.about-stat-value {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.about-stat-label {
+  font-size: 0.6875rem;
+}
+
+.services-zoom-word-wrap {
+  max-width: 1200px;
+}
+
+.work-section-title {
+  font-size: clamp(1.15rem, 3.2vw, 3rem);
+}
+
+.work-counter {
+  font-size: 0.7rem;
+}
+
+.work-all-btn {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.68rem;
+}
+
+.portfolio-bottom-nav {
+  max-width: 1240px;
+}
+
+.work-bottom-counter {
+  font-size: 0.65rem;
+}
+
+.cta-eyebrow {
+  font-size: clamp(1.25rem, 2.4vw, 1.85rem);
+}
+
+.cta-marquee-band {
+  font-size: clamp(1.4rem, 4.5vw, 4rem);
+}
+
+.cta-action-box {
+  max-width: 1000px;
+}
+
+.cta-prompt {
+  font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+}
+
+#cta .display-hero.cta-headline {
+  font-size: clamp(1.6rem, 5.5vw, 5.5rem);
+}
+
+@media (min-width: 1600px) and (max-width: 1920px) {
+  .cta-action-box {
+    max-width: clamp(1000px, 64vw, 1280px);
+  }
+}
+
+.cta-lead {
+  max-width: 720px;
+  font-size: clamp(0.85rem, 1.2vw, 1.125rem);
+}
+
+.cta-start-btn {
+  padding: 0.85rem 2.2rem;
+  font-size: 0.82rem;
+}
+
+.footer-brand-logo {
+  height: clamp(45px, 4.5vw, 65px);
+}
+
+.footer-tagline,
+.footer-legal-tag {
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Large Monitor & Ultrawide Expansion for Lower Sections (> 1920px)
+   Placed after base section rules so cascade order wins cleanly without
+   affecting laptops (1280px-1600px), 1080p, tablets, or mobile viewports.
+   ========================================================================== */
+@media (min-width: 1921px) {
+  .about-founder-card {
+    max-width: clamp(540px, 31vw, 900px);
+  }
+
+  .about-eyebrow {
+    font-size: clamp(1.4rem, 1.1vw, 2.25rem);
+  }
+
+  .about-headline {
+    font-size: clamp(2.5rem, 2.35vw, 4.85rem);
+  }
+
+  .about-desc {
+    font-size: clamp(1.25rem, 1.2vw, 2.4rem);
+  }
+
+  .about-director-card {
+    padding: clamp(1.25rem, 1.2vw, 2.4rem) clamp(1.5rem, 1.5vw, 3rem) !important;
+    border-radius: clamp(16px, 1vw, 28px) !important;
+  }
+
+  .about-director-name {
+    font-size: clamp(1.15rem, 1.05vw, 2.1rem);
+  }
+
+  .about-director-role {
+    font-size: clamp(0.8rem, 0.72vw, 1.45rem);
+  }
+
+  .about-director-badge {
+    font-size: clamp(0.68rem, 0.6vw, 1.2rem);
+    padding: clamp(0.4rem, 0.4vw, 0.8rem) clamp(0.85rem, 0.8vw, 1.6rem) !important;
+  }
+
+  .about-stat-value {
+    font-size: clamp(2.5rem, 2.4vw, 4.75rem);
+  }
+
+  .about-stat-label {
+    font-size: clamp(0.75rem, 0.65vw, 1.35rem);
+  }
+
+  .services-zoom-word-wrap {
+    max-width: clamp(1200px, 78vw, 2800px);
+  }
+
+  .services-card-grid {
+    gap: clamp(1.5rem, 1.4vw, 2.8rem);
+  }
+
+  .service-card,
+  .service-card.card-centered-col2 {
+    height: clamp(360px, 34vh, 620px);
+    border-radius: clamp(20px, 1.1vw, 32px);
+  }
+
+  .service-card-content {
+    padding: clamp(1.5rem, 1.5vw, 3rem);
+  }
+
+  .service-card-title {
+    font-size: clamp(1.6rem, 1.45vw, 3rem);
+  }
+
+  .service-card-details p.body-lead {
+    font-size: clamp(0.95rem, 0.9vw, 1.85rem) !important;
+  }
+
+  .service-card-details p.body-regular {
+    font-size: clamp(0.85rem, 0.8vw, 1.6rem) !important;
+  }
+
+  .stacked-service-card {
+    max-width: 100%;
+    height: clamp(540px, 68vh, 900px);
+  }
+
+  .portfolio-main-stage-wrapper {
+    max-width: 100%;
+    height: clamp(560px, 68vh, 940px);
+    gap: clamp(1.25rem, 1.4vw, 2.5rem);
+  }
+
+  .cards-deck-stage {
+    max-width: none;
+  }
+
+  .portfolio-bottom-nav {
+    max-width: 100%;
+  }
+
+  .work-section-title {
+    font-size: clamp(3rem, 2.8vw, 5.75rem);
+  }
+
+  .work-counter,
+  .work-bottom-counter {
+    font-size: clamp(0.8rem, 0.72vw, 1.45rem);
+  }
+
+  .work-all-btn {
+    padding: clamp(0.45rem, 0.45vw, 0.9rem) clamp(1rem, 0.95vw, 1.9rem);
+    font-size: clamp(0.75rem, 0.7vw, 1.35rem);
+  }
+
+  .cta-eyebrow {
+    font-size: clamp(1.85rem, 1.5vw, 3.1rem);
+  }
+
+  .cta-marquee-band {
+    font-size: clamp(4rem, 3.4vw, 7.2rem);
+  }
+
+  .cta-action-box {
+    max-width: clamp(1000px, 64vw, 2100px);
+  }
+
+  .cta-prompt {
+    font-size: clamp(1.1rem, 1vw, 2rem);
+  }
+
+  #cta .display-hero.cta-headline {
+    font-size: clamp(5.5rem, 5vw, 10.5rem);
+  }
+
+  .cta-lead {
+    max-width: clamp(720px, 46vw, 1450px);
+    font-size: clamp(1.125rem, 1.05vw, 2.15rem);
+  }
+
+  .cta-start-btn {
+    padding: clamp(0.95rem, 0.85vw, 1.75rem) clamp(2.4rem, 2.2vw, 4.4rem);
+    font-size: clamp(0.9rem, 0.8vw, 1.6rem);
+  }
+
+  .footer-brand-logo {
+    height: clamp(65px, 3.2vw, 118px);
+  }
+
+  .footer-pill {
+    font-size: clamp(0.85rem, 0.76vw, 1.5rem);
+    padding: clamp(0.5rem, 0.48vw, 0.95rem) clamp(1.05rem, 0.95vw, 1.9rem);
+  }
+
+  .footer-tagline,
+  .footer-legal-tag {
+    font-size: clamp(0.8rem, 0.72vw, 1.45rem);
+  }
 }
 
 
