@@ -104,13 +104,32 @@ export default function SmoothScroll({ children }) {
       mutationObserver.observe(document.body, { childList: true, subtree: true });
     }
 
-    const handleResizeOrFocus = () => {
+    let lastWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+
+    const handleResize = () => {
       observeElements();
+      const currentWidth = window.innerWidth;
+      const isCoarseTablet = currentWidth <= 1024 && window.matchMedia('(pointer: coarse)').matches;
+      // On mobile & touch tablets, ignore height-only resizes caused by browser address bar show/hide
+      // so pinned ScrollTriggers and page scroll position do not jump when stopping scroll
+      if ((currentWidth < 768 || isCoarseTablet) && currentWidth === lastWidth) {
+        return;
+      }
+      lastWidth = currentWidth;
       ScrollTrigger.refresh();
     };
 
-    window.addEventListener('resize', handleResizeOrFocus);
-    window.addEventListener('focus', handleResizeOrFocus);
+    const handleFocus = () => {
+      observeElements();
+      const currentWidth = window.innerWidth;
+      const isCoarseTablet = currentWidth <= 1024 && window.matchMedia('(pointer: coarse)').matches;
+      if (currentWidth >= 768 && !isCoarseTablet) {
+        ScrollTrigger.refresh();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       if (window.lenis === activeLenis) window.lenis = null;
@@ -118,8 +137,8 @@ export default function SmoothScroll({ children }) {
       clearTimeout(initTimer);
       revealObserver.disconnect();
       mutationObserver.disconnect();
-      window.removeEventListener('resize', handleResizeOrFocus);
-      window.removeEventListener('focus', handleResizeOrFocus);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('focus', handleFocus);
       if (activeLenis) {
         activeLenis.destroy();
       }

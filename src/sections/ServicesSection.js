@@ -7,7 +7,7 @@ import { soundManager } from '@/lib/audioManager';
 import { useSectionInView } from '@/lib/useSectionInView';
 
 export default function ServicesSection({ onOpenProjectModal }) {
-  const [sectionRef, isInView] = useSectionInView({ rootMargin: '350px' });
+  const [sectionRef, isInView] = useSectionInView({ rootMargin: '500px' });
   const [activeCardId, setActiveCardId] = useState(null);
   const zoomStageRef = useRef(null);
   const zoomTextRef = useRef(null);
@@ -44,25 +44,27 @@ export default function ServicesSection({ onOpenProjectModal }) {
 
     const ctx = gsap.context(() => {
       const cards = cardsGridRef.current.querySelectorAll('.service-card');
-      const isMobile = window.innerWidth < 768;
-      const targetScale = isMobile ? 12 : 36; // GPU-optimized scale factor for buttery smooth performance
+      const isSmallScreen = window.innerWidth <= 1024;
+      const isPhone = window.innerWidth <= 640;
+      // Keep zoom scale smooth and within GPU texture bounds on phones, tablets, and desktops
+      const targetScale = isPhone ? 8 : isSmallScreen ? 14 : 18;
 
       // Pin section during zoom phase so cards assemble seamlessly on screen
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: isMobile ? '+=60%' : '+=85%',
+          end: isPhone ? '+=60%' : isSmallScreen ? '+=70%' : '+=85%',
           pin: true,
           pinSpacing: true,
-          scrub: isMobile ? true : 0.35, // Direct touch tracking on mobile for zero lag/shaking
-          anticipatePin: 1,
-          fastScrollEnd: true,
-          invalidateOnRefresh: true,
+          scrub: isSmallScreen ? true : 0.25,
+          anticipatePin: isSmallScreen ? 0 : 1,
+          fastScrollEnd: false,
+          invalidateOnRefresh: !isSmallScreen,
         },
       });
 
-      // 1. Kinetic Typography Zoom on "SERVICES"
+      // 1. Kinetic Typography Zoom on "SERVICES" (2D vector transform prevents GPU bitmap texture clipping/tiling)
       tl.fromTo(
         zoomTextRef.current,
         {
@@ -74,11 +76,12 @@ export default function ServicesSection({ onOpenProjectModal }) {
           opacity: 0,
           ease: 'power1.in',
           duration: 1.0,
+          force3D: false,
         },
         0
       );
 
-      // 2. Smoothly fade out zoom stage overlay
+      // 2. Smoothly fade out zoom stage overlay (keep layer mounted via opacity instead of visibility toggle to prevent fast-scroll raster cuts)
       tl.fromTo(
         zoomStageRef.current,
         {
@@ -92,23 +95,41 @@ export default function ServicesSection({ onOpenProjectModal }) {
         0.45
       );
 
-      // 3. Staggered card entrance: sliding smoothly from side corners and bottom-up
+      // 3. Card entrance: reveal visible cards on mobile/tablet cleanly; full 3-column stagger on desktop
       cards.forEach((card, idx) => {
-        const col = isMobile ? 0 : idx % 3;
-        let startX = 0;
-        let startY = 40;
+        if (isSmallScreen) {
+          if (isPhone && idx >= 4) return;
+          tl.fromTo(
+            card,
+            {
+              opacity: 0,
+              y: 24,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              ease: 'power2.out',
+              duration: 0.4,
+              force3D: true,
+            },
+            0.35 + idx * 0.05
+          );
+          return;
+        }
 
-        if (!isMobile) {
-          if (col === 0) {
-            startX = -60;
-            startY = 35;
-          } else if (col === 1) {
-            startX = 0;
-            startY = 50;
-          } else {
-            startX = 60;
-            startY = 35;
-          }
+        const col = idx % 3;
+        let startX = 0;
+        let startY = 35;
+
+        if (col === 0) {
+          startX = -60;
+          startY = 35;
+        } else if (col === 1) {
+          startX = 0;
+          startY = 50;
+        } else {
+          startX = 60;
+          startY = 35;
         }
 
         tl.fromTo(
@@ -127,7 +148,7 @@ export default function ServicesSection({ onOpenProjectModal }) {
             ease: 'power2.out',
             duration: 0.45,
           },
-          0.25 + (idx * (isMobile ? 0.05 : 0.07))
+          0.25 + idx * 0.07
         );
       });
     }, sectionRef);
@@ -158,6 +179,7 @@ export default function ServicesSection({ onOpenProjectModal }) {
       {/* Pinned Kinetic Zoom Stage Overlay on "SERVICES" */}
       <div
         ref={zoomStageRef}
+        className="services-zoom-stage"
         style={{
           position: 'absolute',
           top: 0,
@@ -207,12 +229,11 @@ export default function ServicesSection({ onOpenProjectModal }) {
             viewBox="0 0 4320 960"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="services-zoom-svg"
             style={{
               width: '100%',
               height: 'auto',
               overflow: 'visible',
-              shapeRendering: 'geometricPrecision',
-              textRendering: 'geometricPrecision',
             }}
           >
             <text
@@ -242,7 +263,6 @@ export default function ServicesSection({ onOpenProjectModal }) {
           className="services-card-grid"
           style={{
             width: '100%',
-            willChange: 'transform, opacity',
           }}
         >
           {serviceItems.map((item) => {

@@ -855,10 +855,10 @@
 
   /* Mobile Responsive Optimization for Hero Section */
   .hero-section {
-    height: 100dvh !important;
     height: 100vh !important;
-    min-height: 100dvh !important;
-    max-height: 100dvh !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+    max-height: 100svh !important;
     padding-top: var(--navbar-height, 68px) !important;
     padding-bottom: 0.5rem !important;
     display: flex !important;
@@ -1248,8 +1248,19 @@
   flex-direction: column;
   height: clamp(285px, 35vh, 360px);
   cursor: default;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card {
+    transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+.services-zoom-svg {
+  shape-rendering: geometricPrecision;
+  text-rendering: geometricPrecision;
 }
 
 /* Card 7 Centered in Middle Column (2nd Column) of 3rd Row with identical size to all cards */
@@ -2071,6 +2082,46 @@
 @supports not (height: 100lvh) {
   .cta-bg-layer {
     height: 100vh;
+  }
+}
+
+/* Mobile & Tablet height stabilization & GPU performance tuning for Services zoom stage (preserves fixed .cta-bg-layer) */
+@media (max-width: 1024px) {
+  #services {
+    min-height: 100vh !important;
+    min-height: 100lvh !important;
+    padding-top: calc(var(--navbar-height, 68px) + 1.5rem) !important;
+    padding-bottom: 2rem !important;
+  }
+
+  #services .services-zoom-stage {
+    height: 100vh !important;
+    height: 100lvh !important;
+  }
+
+  .services-zoom-svg {
+    shape-rendering: auto;
+    text-rendering: optimizeSpeed;
+  }
+
+  .service-card {
+    contain: layout style paint;
+  }
+
+  .service-card.is-active {
+    transform: none;
+  }
+
+  .service-card.is-active .service-card-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: linear-gradient(180deg, rgba(6, 7, 10, 0.92) 0%, rgba(6, 7, 10, 0.98) 100%) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .service-card {
+    height: 280px;
   }
 }
 
