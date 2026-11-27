@@ -60,7 +60,7 @@ export default function CTASection({ onOpenModal, onOpenProjectModal }) {
       {/* Responsive Background Image Layer (Fixed Curtain Reveal on Desktop, Rock-Solid Absolute on Mobile) */}
       <div className="cta-bg-layer">
         <img
-          src="/images/contact-bg.webp"
+          src="/images/Cinematic Camera contact bg.webp"
           alt=""
           style={{
             width: '100%',
