@@ -46,6 +46,10 @@ export default function ServicesSection({ onOpenProjectModal }) {
       const cards = cardsGridRef.current.querySelectorAll('.service-card');
       const isSmallScreen = window.innerWidth <= 1024;
       const isPhone = window.innerWidth <= 640;
+      const isMobileView = window.innerWidth <= 767;
+      const mobileAnimatedCards = [];
+      let wasBehindOverlay = false;
+      let card2ExitingReverse = false;
       // Keep zoom scale smooth and within GPU texture bounds on phones, tablets, and desktops
       const targetScale = isPhone ? 8 : isSmallScreen ? 14 : 18;
 
@@ -61,6 +65,46 @@ export default function ServicesSection({ onOpenProjectModal }) {
           anticipatePin: isSmallScreen ? 0 : 1,
           fastScrollEnd: false,
           invalidateOnRefresh: !isSmallScreen,
+          onUpdate: (self) => {
+            if (!isMobileView) return;
+            const card2 = cards[1];
+            // When scrolling back up into SERVICES zoom (< 0.78, well away from unpin boundary),
+            // smoothly move Card 2 down alongside Card 1 without micro-bounce on touch deceleration
+            if (card2) {
+              if (self.direction === -1 && self.progress < 0.78 && !card2ExitingReverse) {
+                card2ExitingReverse = true;
+                gsap.to(card2, {
+                  opacity: 0,
+                  y: 85,
+                  duration: 0.38,
+                  ease: 'power2.out',
+                  force3D: true,
+                  overwrite: 'auto',
+                });
+              } else if (self.direction === 1 && self.progress >= 0.85 && card2ExitingReverse) {
+                card2ExitingReverse = false;
+                gsap.to(card2, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.6,
+                  ease: 'power3.out',
+                  force3D: true,
+                  overwrite: 'auto',
+                });
+              }
+            }
+
+            const behindOverlay = self.progress < 0.25;
+            if (behindOverlay && !wasBehindOverlay) {
+              wasBehindOverlay = true;
+              card2ExitingReverse = false;
+              mobileAnimatedCards.forEach((c) => {
+                if (c) gsap.set(c, { opacity: 0, y: 70, overwrite: 'auto', force3D: true });
+              });
+            } else if (!behindOverlay) {
+              wasBehindOverlay = false;
+            }
+          },
         },
       });
 
@@ -95,10 +139,60 @@ export default function ServicesSection({ onOpenProjectModal }) {
         0.45
       );
 
-      // 3. Card entrance: reveal visible cards on mobile/tablet cleanly; full 3-column stagger on desktop
+      // 3. Card entrance:
+      // - Mobile (<= 767px): Card 1 rises right as SERVICES finishes zooming; cards 2-6 glide up one-by-one
+      //   on downward scroll (replaying every time you come from above, staying stable when scrolling up from footer)
+      // - Tablet (768px-1024px): clean staggered entrance
+      // - Desktop (> 1024px): full 3-column stagger
       cards.forEach((card, idx) => {
+        if (isMobileView) {
+          if (idx === 0) {
+            tl.fromTo(
+              card,
+              {
+                opacity: 0,
+                y: 85,
+              },
+              {
+                opacity: 1,
+                y: 0,
+                ease: 'power2.out',
+                duration: 0.42,
+                force3D: true,
+              },
+              0.58
+            );
+          } else {
+            mobileAnimatedCards.push(card);
+            gsap.set(card, { opacity: 0, y: 70, force3D: true });
+
+            const triggerStart = idx === 1 ? 'top 44%' : idx === 2 ? 'top 74%' : 'top 88%';
+            gsap.timeline({
+              scrollTrigger: {
+                trigger: card,
+                pinnedContainer: sectionRef.current,
+                start: triggerStart,
+                onEnter: () => {
+                  gsap.fromTo(
+                    card,
+                    { opacity: 0, y: 70 },
+                    {
+                      opacity: 1,
+                      y: 0,
+                      duration: 0.75,
+                      ease: 'power3.out',
+                      force3D: true,
+                      overwrite: 'auto',
+                    }
+                  );
+                },
+              },
+            });
+          }
+          return;
+        }
+
         if (isSmallScreen) {
-          if (isPhone && idx >= 4) return;
           tl.fromTo(
             card,
             {
