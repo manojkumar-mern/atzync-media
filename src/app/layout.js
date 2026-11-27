@@ -155,6 +155,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={arimo.variable}>
       <head>
+        <link rel="preconnect" href="https://stream.mux.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://image.mux.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://stream.mux.com" />
+        <link rel="dns-prefetch" href="https://image.mux.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

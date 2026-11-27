@@ -10,7 +10,7 @@ import { useSectionInView } from '@/lib/useSectionInView';
 
 export default function SelectedWorkSection({ onOpenModal }) {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-  const [sectionRef, isInView] = useSectionInView({ rootMargin: '350px' });
+  const [sectionRef, isInView] = useSectionInView({ rootMargin: '800px' });
   const viewportRef = useRef(null);
   const cardsRef = useRef([]);
 
@@ -173,6 +173,7 @@ export default function SelectedWorkSection({ onOpenModal }) {
                       onOpenModal({
                         title: project.title,
                         videoSrc: project.video,
+                        posterSrc: project.poster,
                         aspect: project.aspect,
                         orientation: project.orientation,
                       });
@@ -208,6 +209,7 @@ export default function SelectedWorkSection({ onOpenModal }) {
                   >
                     <LazyVideo
                       src={isInView && isCurrentOrNext ? project.video : undefined}
+                      poster={project.poster}
                       autoPlay={activeProjectIndex === index}
                       isPortrait={project.orientation === 'portrait'}
                       style={{

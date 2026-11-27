@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import Hls from 'hls.js';
+import { createHlsConfig, applyOptimalStartLevel } from '@/lib/hlsConfig';
 
 export default function LazyVideo({
   src,
@@ -59,18 +60,14 @@ export default function LazyVideo({
         hlsRef.current = null;
       }
 
-      const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: false,
-        backBufferLength: 15,
-        maxBufferLength: 20,
-        maxMaxBufferLength: 30,
-        maxBufferSize: 30 * 1000 * 1000,
-        capLevelToPlayerSize: false, // Preserves 4K UHD renditions
-      });
+      const hls = new Hls(createHlsConfig({ mode: 'preview', isActive: autoPlay }));
 
       hls.loadSource(src);
       hls.attachMedia(video);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        applyOptimalStartLevel(hls);
+      });
 
       hls.on(Hls.Events.FRAG_BUFFERED, () => {
         if (video.readyState >= 2) {
@@ -178,6 +175,10 @@ export default function LazyVideo({
     if (!video) return;
 
     if (autoPlay && src) {
+      if (hlsRef.current) {
+        hlsRef.current.config.maxBufferLength = 12;
+        hlsRef.current.config.maxMaxBufferLength = 20;
+      }
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
