@@ -34,26 +34,17 @@ export default function WorkPage() {
 
   const categories = [
     { id: 'ALL', label: 'ALL WORK' },
-    { id: 'Branding Film', label: 'BRANDING FILMS' },
-    { id: 'Commercial Ad', label: 'COMMERCIAL ADS' },
-    { id: 'Social Media Video', label: 'VIRAL REELS' },
-    { id: 'Meta Ads Creative', label: 'META ADS' },
-    { id: 'AI Video Production', label: 'AI VIDEO' },
-    { id: 'Social Media Handling', label: 'SOCIAL MEDIA' },
+    { id: 'Commercial Ad Film', label: 'COMMERCIAL AD FILM' },
+    { id: 'Product Photography', label: 'PRODUCT PHOTOGRAPHY' },
+    { id: 'Corporate Videos', label: 'CORPORATE VIDEOS' },
+    { id: 'Real Estate Videos', label: 'REAL ESTATE VIDEOS' },
+    { id: 'Promotional Videos', label: 'PROMOTIONAL VIDEOS' },
+    { id: 'Meta Ads', label: 'META ADS' },
   ];
 
   const filteredProjects = activeCategory === 'ALL'
     ? projects
     : projects.filter((p) => p.category.toLowerCase().includes(activeCategory.toLowerCase()));
-
-  const projectSpecsMap = {
-    'project-01': ['Cinematic Pacing', 'Custom Color Grade', 'Sound Architecture'],
-    'project-02': ['Conversion Hooks', 'Dynamic Rhythm Cuts', 'High-Impact SFX'],
-    'project-03': ['9:16 Retention Cuts', 'Viral Hook Design', 'Motion Typography'],
-    'project-04': ['Creative Testing', 'Multi-Hook Variations', 'Direct-Response Edits'],
-    'project-05': ['Precision Assembly', 'Master Export Suites', 'ARRI/LOG Color Mastery'],
-    'project-06': ['Generative Synthesis', 'Neural VFX Cleanup', 'AI Upscaling & Motion'],
-  };
 
   return (
     <main className="main-viewport" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh' }}>
@@ -91,21 +82,42 @@ export default function WorkPage() {
           {/* Breadcrumb & Subheading */}
           <div className="flex-row items-center justify-between" style={{ flexWrap: 'wrap', gap: '0.75rem' }}>
             <div className="flex-row items-center" style={{ gap: '0.6rem', fontSize: '0.75rem' }}>
-              <Link href="/" style={{ color: 'var(--text-muted)', transition: 'color 0.2s ease' }} className="nav-link-item">
+              <Link
+                href="/"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem('atzync_return_to_work');
+                  }
+                }}
+                style={{ color: 'var(--text-muted)', transition: 'color 0.2s ease' }}
+                className="nav-link-item"
+              >
                 HOME
               </Link>
               <span style={{ color: 'var(--text-muted)' }}>/</span>
               <span style={{ color: 'var(--accent-orange)', fontWeight: 600 }}>ALL WORK</span>
             </div>
 
-            <div className="flex-row items-center" style={{ gap: '0.6rem' }}>
-              <span className="badge-tag" style={{ fontSize: '0.68rem', padding: '0.25rem 0.65rem' }}>
-                {projects.length} FEATURED CUTS
-              </span>
-              <span className="timecode-tag" style={{ fontSize: '0.65rem' }}>
-                4K DCI // 24FPS
-              </span>
-            </div>
+            <Link
+              href="/#work"
+              onClick={() => {
+                soundManager.playClick();
+                if (typeof window !== 'undefined') {
+                  sessionStorage.setItem('atzync_return_to_work', '1');
+                }
+              }}
+              className="btn-secondary"
+              style={{
+                padding: '0.35rem 0.9rem',
+                fontSize: '0.7rem',
+                borderRadius: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+              }}
+            >
+              ← BACK
+            </Link>
           </div>
 
           {/* Main Title */}
@@ -113,7 +125,7 @@ export default function WorkPage() {
             <h1
               className="heading-lg"
               style={{
-                fontSize: 'clamp(2.2rem, 6vw, 4.8rem)',
+                fontSize: 'clamp(1.75rem, 4.2vw, 3.35rem)',
                 lineHeight: 1.05,
                 letterSpacing: '-0.02em',
                 textTransform: 'uppercase',
@@ -165,8 +177,6 @@ export default function WorkPage() {
         <div className="site-container">
           <div className="portfolio-grid">
             {filteredProjects.map((project, index) => {
-              const specs = projectSpecsMap[project.id] || ['Precision Assembly', 'Color Mastery', 'Sound Architecture'];
-
               return (
                 <div
                   key={project.id}
@@ -221,6 +231,7 @@ export default function WorkPage() {
 
                     {/* Play Hint */}
                     <div
+                      aria-label={`Play ${project.title}`}
                       style={{
                         position: 'absolute',
                         bottom: '0.85rem',
@@ -228,38 +239,19 @@ export default function WorkPage() {
                         zIndex: 3,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.4rem',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        fontSize: '0.72rem',
-                        fontWeight: 600,
-                        letterSpacing: '0.04em',
+                        color: 'rgba(255, 255, 255, 0.92)',
+                        filter: 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7))',
                       }}
                     >
-                      <span
-                        style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          backgroundColor: 'var(--accent-orange)',
-                          display: 'inline-block',
-                        }}
-                      />
-                      ▶ WATCH FULL CUT
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <polygon points="5 3 19 12 5 21 5 3" />
+                      </svg>
                     </div>
                   </div>
 
                   {/* Card Narrative Body */}
                   <div className="portfolio-card-body">
                     <div className="flex-col" style={{ gap: '0.4rem' }}>
-                      <div className="flex-row items-center justify-between">
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-orange)' }}>
-                          CLIENT: {project.client}
-                        </span>
-                        <span className="meta-tag" style={{ fontSize: '0.68rem' }}>
-                          2.39:1 // 4K
-                        </span>
-                      </div>
-
                       <h3
                         style={{
                           fontSize: 'clamp(1.35rem, 2.2vw, 1.75rem)',
@@ -288,54 +280,6 @@ export default function WorkPage() {
                       >
                         {project.description}
                       </p>
-                    </div>
-
-                    {/* Specs Pills & Watch Button */}
-                    <div className="flex-col" style={{ gap: '0.85rem', marginTop: '0.5rem' }}>
-                      <div className="flex-row items-center" style={{ flexWrap: 'wrap', gap: '0.35rem' }}>
-                        {specs.map((spec, sIdx) => (
-                          <span
-                            key={sIdx}
-                            style={{
-                              fontSize: '0.65rem',
-                              fontWeight: 600,
-                              padding: '0.25rem 0.55rem',
-                              borderRadius: '100px',
-                              backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                              border: '1px solid rgba(255, 255, 255, 0.1)',
-                              color: 'rgba(255, 255, 255, 0.85)',
-                            }}
-                          >
-                            ✓ {spec}
-                          </span>
-                        ))}
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenModal({
-                            title: project.title,
-                            videoSrc: project.video,
-                            posterSrc: project.poster,
-                          });
-                        }}
-                        className="btn-primary flex-row items-center justify-between"
-                        style={{
-                          padding: '0.6rem 1.15rem',
-                          fontSize: '0.78rem',
-                          fontWeight: 700,
-                          borderRadius: '100px',
-                          cursor: 'pointer',
-                          width: '100%',
-                        }}
-                      >
-                        <span>WATCH FULL CUT</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                          <polygon points="5 3 19 12 5 21 5 3" />
-                        </svg>
-                      </button>
                     </div>
                   </div>
                 </div>

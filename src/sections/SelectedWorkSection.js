@@ -120,7 +120,13 @@ export default function SelectedWorkSection({ onOpenModal }) {
                 borderColor: 'var(--border-strong)',
                 whiteSpace: 'nowrap',
               }}
-              onClick={() => soundManager.playClick()}
+              onClick={() => {
+                soundManager.playClick();
+                if (typeof window !== 'undefined') {
+                  window.history.replaceState(window.history.state, '', '/#work');
+                  sessionStorage.setItem('atzync_return_to_work', '1');
+                }
+              }}
             >
               VIEW ALL WORK →
             </Link>

@@ -93,6 +93,10 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
     const observer = new IntersectionObserver(
       (entries) => {
         if (isNavClickRef.current) return;
+        if (typeof window !== 'undefined' && window.__atzyncReturningToWorkUntil > Date.now()) {
+          setActiveSection('work');
+          return;
+        }
 
         // If at the very top of the page, keep hero active and clean URL
         if (typeof window !== 'undefined' && window.scrollY < 120) {

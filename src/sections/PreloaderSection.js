@@ -13,12 +13,17 @@ export default function PreloaderSection({ onComplete }) {
   const [timecodeStr, setTimecodeStr] = useState('00:00:00:00');
 
   useEffect(() => {
-    // Check reduced motion preference
+    // Check reduced motion preference or return-to-section navigation (skip fresh preloader curtain)
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isReturningToWork =
+      window.location.hash === '#work' ||
+      sessionStorage.getItem('atzync_return_to_work') === '1';
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || isReturningToWork) {
       if (overlayRef.current) {
         overlayRef.current.style.display = 'none';
+        overlayRef.current.style.visibility = 'hidden';
+        overlayRef.current.style.pointerEvents = 'none';
       }
       if (onComplete) onComplete();
       return;

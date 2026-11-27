@@ -23,7 +23,7 @@ export const siteData = {
     email: "atzyncmedia@gmail.com",
     youtubeUrl: "https://www.youtube.com/@atzyncmedia",
     instagramUrl: "https://www.instagram.com/atzyncmedia/",
-    linkedinUrl: "https://www.linkedin.com/company/atzyncmedia/",
+    linkedinUrl: "https://www.linkedin.com/in/atzync-media-1013b6445/",
     location: "Global Remote Studio",
   },
   services: [

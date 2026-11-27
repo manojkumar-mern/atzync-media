@@ -6,7 +6,7 @@ export const projects = [
   {
     id: 'project-06',
     title: 'MATHESON AVENUE',
-    category: 'Commercial Film',
+    category: 'Real Estate Videos',
     year: '2026',
     client: 'MATHESON',
     description: 'Architectural storytelling and cinematic 4K landscape presentation for Matheson Avenue.',
@@ -22,7 +22,7 @@ export const projects = [
   {
     id: 'project-02',
     title: 'SPIRO GRANDPARENTS DAY',
-    category: 'Commercial Ad',
+    category: 'Commercial Ad Film',
     year: '2026',
     client: 'SPIRO',
     description: 'Emotional storytelling and high-retention commercial cut crafted for Spiro Grandparents Day.',
@@ -38,7 +38,7 @@ export const projects = [
   {
     id: 'project-03',
     title: 'JCI PROMO',
-    category: 'Social Media Video',
+    category: 'Promotional Videos',
     year: '2026',
     client: 'JCI',
     description: 'Platform-optimized visual storytelling and high-impact cuts tailored for JCI promo engagement.',
@@ -54,7 +54,7 @@ export const projects = [
   {
     id: 'project-04',
     title: 'ELIXIR CARE',
-    category: 'Meta Ads Creative',
+    category: 'Meta Ads',
     year: '2026',
     client: 'ELIXIR CARE',
     description: 'Direct-response performance ad creative engineered to maximize audience conversion for Elixir Care.',
@@ -70,7 +70,7 @@ export const projects = [
   {
     id: 'project-05',
     title: 'DORA FASHION SCHOOL',
-    category: 'Fashion Film',
+    category: 'Promotional Videos',
     year: '2026',
     client: 'DORA',
     description: 'High-fashion aesthetic, runway rhythm, and stylistic color grade for Dora Fashion School.',
@@ -86,7 +86,7 @@ export const projects = [
   {
     id: 'project-01',
     title: 'NEXTOWN REAL ESTATE',
-    category: 'Branding Film',
+    category: 'Real Estate Videos',
     year: '2026',
     client: 'NEXTOWN',
     description: 'Commercial walkthrough, architectural pacing, and custom color grading for Nextown Real Estate.',
