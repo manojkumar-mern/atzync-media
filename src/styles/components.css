@@ -422,6 +422,18 @@
   transition: padding var(--transition-medium), background-color var(--transition-medium);
 }
 
+@media (max-width: 767px) {
+  .navbar-header {
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), padding var(--transition-medium), background-color var(--transition-medium);
+    will-change: transform;
+  }
+
+  .navbar-header.mobile-hidden {
+    transform: translate3d(0, -105%, 0) !important;
+    pointer-events: none;
+  }
+}
+
 .nav-link-item {
   font-family: var(--font-heading);
   font-size: 0.8125rem;

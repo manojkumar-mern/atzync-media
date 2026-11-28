@@ -7,27 +7,49 @@ import { siteData } from '@/data/siteData';
 
 export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileNavHidden, setIsMobileNavHidden] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const navRef = useRef(null);
   const isNavClickRef = useRef(false);
+  const lastScrollYRef = useRef(0);
   const pathname = usePathname();
   const router = useRouter();
   const isWorkPage = pathname === '/work';
 
-  // Scroll listener for sticky background transition
+  // Scroll listener for sticky background transition & mobile smart auto-hide
   useEffect(() => {
+    lastScrollYRef.current = Math.max(0, window.scrollY);
+
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      const currentY = Math.max(0, window.scrollY);
+      setIsScrolled(currentY > 40);
+
+      if (window.innerWidth > 767) {
+        setIsMobileNavHidden(false);
+        lastScrollYRef.current = currentY;
+        return;
+      }
+
+      if (currentY <= 70 || mobileMenuOpen) {
+        setIsMobileNavHidden(false);
+        lastScrollYRef.current = currentY;
+        return;
+      }
+
+      const delta = currentY - lastScrollYRef.current;
+      if (delta > 6) {
+        setIsMobileNavHidden(true);
+        lastScrollYRef.current = currentY;
+      } else if (delta < -6) {
+        setIsMobileNavHidden(false);
+        lastScrollYRef.current = currentY;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [mobileMenuOpen]);
 
   // Entrance animation trigger
   useEffect(() => {
@@ -254,7 +276,7 @@ export default function NavbarSection({ isLoaded, onOpenProjectModal }) {
     <>
       <header
         ref={navRef}
-        className={`navbar-header ${isScrolled ? 'scrolled' : ''}`}
+        className={`navbar-header ${isScrolled ? 'scrolled' : ''} ${isMobileNavHidden ? 'mobile-hidden' : ''}`}
         style={{ opacity: isLoaded ? 1 : 0 }}
       >
         <div className="site-container flex-row items-center justify-between">
